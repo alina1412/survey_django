@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container">
+    
+        <h3>{{list_head}}</h3>
+        <br>
+        {% if not object_list %}
+        <p> Empty </p>
+        
+        {% else %}
+
+        <form action="{% url 'survey:survey_list' %}" method="post">
+                {% csrf_token %}
+                <table class="table">
+                        <tr>
+                        <th></th>
+                        <th>surveys</th>
+                        
+                        <th>to delete</th>
+                        </tr>
+                        {% for item in object_list %}
+                        <tr>
+                                <td><a href="{% url 'survey:survey_detail' pk=item.id %}"> 👁 </a></td>
+                                <td> {{item.title}}</td>
+                                <td><input type="checkbox" name="{{item.id}}" id="{{item.id}}"></td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                                <td></td>
+                                <td>
+                                <input type="submit" name="download" value="download my list" >  </input>
+                                </td>        
+                                
+                            
+                                <td>
+
+             <button type="submit" name="delete"> delete selected</button>
+                                   </td>
+                        </tr>
+                </table>
+                <p></p>
+                   </form>
+        {% endif %}
+</div>
+
+{% endblock %}
+

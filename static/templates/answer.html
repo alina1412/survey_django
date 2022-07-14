@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container">
+    <form action="{% url 'survey:answer' %}" method="post">
+        {% csrf_token %}
+        <h3>answer</h3>
+        <table class="table">{{ form.as_table }}</table>
+
+        
+        <button type="button" class="btn btn-primary"> submit </button>
+    
+    </form>
+</div>
+
+{% endblock %}

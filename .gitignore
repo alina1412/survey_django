@@ -1,0 +1,14 @@
+debug.log
+**/.vscode/
+**/__pycache__/
+.mypy_cache
+**/bdj_env/
+**/venv_sur/
+.env
+db.sqlite3
+**/download/
+private_conf.py
+.coverage
+htmlcov
+geckodriver.log
+.pytest_cache

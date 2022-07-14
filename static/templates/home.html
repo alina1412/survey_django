@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block suggest-to-log %}
+{% if auth %}
+        {% else %}
+        {% include 'templates/suggest-to-log.html' %}
+        {% endif %}
+{% endblock suggest-to-log %}
+
+
+{% block logout %}
+        {% if auth %}
+        {% include 'templates/logout.html' %}
+        {% else %}
+        {% endif %}
+{% endblock logout %} 
+
+
+{% block body %}
+<div class="container">
+        <h3>This it a site to keep tables of books!</h3>
+        <p>Log in to continue! See you!</p>
+</div>
+{% endblock %}

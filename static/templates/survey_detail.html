@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>{{title}}</title> 
+{% endblock title %} 
+
+{% block body %}
+
+<div class="container">
+    <h3>{{survey.title}}</h3>
+
+    <form action="{% url 'survey:survey_detail' pk=survey.id %}" method="post">
+        {% csrf_token %}
+        <table class="table">
+                <tr>
+                <th></th>
+                <th>questions</th>
+                <th>to delete</th>
+                </tr>
+                {% for item in data %}
+                <tr>
+                        <td><a href="{% url 'survey:question_detail' pk=item.id %}"> 👁 </a></td>
+                        <td> {{item.question}}</td>
+                        <td><input type="checkbox" name="{{item.id}}" id="{{item.id}}"></td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>    
+                        <td>
+                        <input type="submit" name="download" value="download my list" >  </input>
+                        </td>        
+                        
+                        <td><button type="submit" name="delete"> delete selected</button></td>
+                </tr>
+        </table>
+
+        <p><a href="{% url 'survey:add_question' survey_id=survey.id %}"> Add a question </a></p>
+
+</div>
+
+{% endblock %}

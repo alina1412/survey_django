@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>{{title}}</title> 
+{% endblock title %} 
+
+{% block body %}
+
+<div class="container">
+    
+        <h3>{{list_head}}</h3>
+        <br>
+        {% if not object_list %}
+        <p> Empty </p>
+        
+        {% else %}
+
+        <form action="{% url 'survey:questions_list' %}" method="post">
+                {% csrf_token %}
+                <table class="table">
+                        <tr>
+                        <th>questions</th>
+                        
+                        <th>to delete</th>
+                        </tr>
+                        {% for item in object_list %}
+                        <tr>
+                                <td> {{item.question}}</td>
+                                <td><input type="checkbox" name="{{item.id}}" id="{{item.id}}"></td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                                <td>
+                                <input type="submit" name="download" value="download my list" >  </input>
+                                </td>        
+                                
+                            
+                                <td>
+
+             <button type="submit" name="delete"> delete selected</button>
+                                   </td>
+                        </tr>
+                </table>
+                <p></p>
+                   </form>
+        {% endif %}
+</div>
+
+{% endblock %}

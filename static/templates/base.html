@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/css/bootstrap.min.css" integrity="sha512-T584yQ/tdRR5QwOpfvDfVQUidzfgc2339Lc8uBDtcp/wYu80d7jwBgAxbyMh0a9YM9F8N3tdErpFI8iaGx6x5g==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="{% static 'styles.css' %}" type="text/css" />
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/ico"/>
+
+    {% block title %}
+    <title>Site</title> 
+    {% endblock title %} 
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <a href="{% url 'survey:question_detail' pk=1 %}"> question1 </a>
+            <a href="{% url 'survey:survey_detail' pk=1 %}"> survey1 </a>
+            <a href="{% url 'survey:add_question' survey_id=1 %}"> add_question_to_the_first_survey </a>
+            <a href="{% url 'survey:survey_list' %}"> surveys </a>
+        
+        </div>
+
+        <div class="sidebar">
+        
+            <div class="message-block">
+                {% block k %}
+                {% include 'messages.html' %}
+                {% endblock k %} 
+                <!-- <ul class="error1">
+                    <li class="message"> Error Error Error Error Error Error Error Error Error Error Error
+                         ErrorErrorErrorErrorErrorErrorErrorErrorErrorErrorErrorError
+                    </li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="content">
+            {% block body %}
+            {% endblock %} 
+
+        </div>
+    </div>
+
+
+    
+</body>
+</html>
