@@ -69,12 +69,6 @@ WSGI_APPLICATION = 'survey_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 def parse_db_url():
     db_url = os.environ.get("DATABASE_URL")
     db_url_parsed = urlparse(db_url)
@@ -89,9 +83,17 @@ def parse_db_url():
     return d
 
 
-DATABASES = {
-    'default': parse_db_url()
-}
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': parse_db_url()
+    }
 
 
 LOGGING = {

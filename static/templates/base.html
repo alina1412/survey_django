@@ -15,13 +15,35 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="sidebar">
-            <a href="{% url 'survey:question_detail' pk=1 %}"> question1 </a>
-            <a href="{% url 'survey:survey_detail' pk=1 %}"> survey1 </a>
-            <a href="{% url 'survey:add_question' survey_id=1 %}"> add_question_to_the_first_survey </a>
-            <a href="{% url 'survey:survey_list' %}"> surveys </a>
-        
-        </div>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-md-center">
+
+            <div>
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'survey:question_detail' pk=1 %}">question1</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'survey:survey_detail' pk=1 %}">survey1</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'survey:add_question' survey_id=1 %}">add_question_to_the_first_survey</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'survey:survey_list' %}">surveys</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'survey:add_survey' %}">add survey</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'survey:add_choice' question_id=1 %}">add choice for q1</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'survey:answer' survey_id=1 %}">vote for s1</a>
+                    </li>       
+                </ul>
+            </div>
+        </nav>
 
         <div class="sidebar">
         
@@ -37,7 +59,16 @@
             </div>
         </div>
         <div class="content">
-            {% block body %}
+            
+            <div class="jumbotron" style="padding: 2rem 3rem;">
+            <h3 class="display-6">
+            {% block h3-title %}
+            {% endblock h3-title %} 
+            </h3>
+            </div>
+            
+             {% block body %}
+
             {% endblock %} 
 
         </div>

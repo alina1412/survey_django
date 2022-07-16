@@ -4,15 +4,22 @@
 <title>{{title}}</title> 
 {% endblock title %} 
 
+
+{% block h3-title %}
+{{h3}}
+{% endblock h3-title %} 
+
 {% block body %}
 
 <div class="container">
-    <h3>{{question}}</h3>
-    {% for item in data %}
-    <p>{{item.choice}}</p>
+
     
+    {% for item in data %}
+    <li>{{item.choice}}</li>
     {% endfor %}
     
+
+    <p><a href="{% url 'survey:add_choice' question_id=question_id %}"> Add a choice </a></p>
 </div>
 
 {% endblock %}

@@ -1,8 +1,6 @@
-from dataclasses import fields
-import enum
 
 from django import forms
-from .models import Question, Survey
+from .models import  Question, Survey, Choice
 
 
 class CreateSurvey(forms.ModelForm):
@@ -19,10 +17,15 @@ class AddQuestionForm(forms.ModelForm):
         fields = ['question']
 
 
-ShopUnitType = enum.Enum("ShopUnitType", [
-    ("OFFER", "OFFER"),
-    ("CATEGORY", "CATEGORY")
-])
+class AddChoiceForm(forms.ModelForm):
+    class Meta:
+        model = Choice
+        fields = ['choice']
 
-class OptionForm(forms.Form):
-    choice = forms.ChoiceField(choices = ShopUnitType) 
+
+
+
+
+
+
+

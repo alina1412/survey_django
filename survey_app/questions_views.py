@@ -22,7 +22,7 @@ class AddQuestionView(CreateView):
     # fields = ['question']
     form_class = AddQuestionForm
     template_name = 'add_template.html'
-    extra_context = {'h3': 'add question'}
+    extra_context = {'h3': 'add a question', 'title': 'add question'}
 
     def get_success_url(self):
         return reverse_lazy('survey:question_detail', kwargs={'pk': self.object.pk})
@@ -56,7 +56,8 @@ class DetailQuestionView(DetailView):
         data = Choice.objects.filter(question=self.kwargs['pk'])
         q = Question.objects.get(pk=self.kwargs['pk'])
         # print(q)
-        context['question'] = q.question
+        context['h3'] = q.question
+        context['question_id'] = q.id
         context['data'] = data
         return context
 

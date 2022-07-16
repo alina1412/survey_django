@@ -22,7 +22,7 @@ class AddSurveyView(CreateView): # LoginRequiredMixin
     """'add-survey/' name='add_survey'"""
     template_name = "add_template.html"
     form_class = CreateSurvey
-    extra_context = {'title': 'add survey'}
+    extra_context = {'title': 'add survey', 'h3': 'add a survey'}
     # context_object_name = 'object_list'
 
     def get_success_url(self): 
@@ -32,7 +32,6 @@ class AddSurveyView(CreateView): # LoginRequiredMixin
         form.instance.owner = User.objects.get(id=self.request.user.id)
         form.save()
         return super().form_valid(form)
-
 
 
 class DetailSurveyView(DetailView):
@@ -49,6 +48,7 @@ class DetailSurveyView(DetailView):
         questions = Question.objects.filter(survey=self.kwargs['pk'])
         context['data'] = questions
         context['survey'] = surv
+        context['h3'] = surv.title
         return context
 
     def post(self, request, *args, **kwargs):
@@ -59,6 +59,7 @@ class DetailSurveyView(DetailView):
                 if x == 'on':
                     item.delete()
         return redirect('survey:survey_detail', pk=self.kwargs['pk'])
+
 
 class ListSurveysView(ListView):
     """'surveys/', name='survey_list'"""
@@ -77,7 +78,7 @@ class ListSurveysView(ListView):
         context['object_list'] = self.get_queryset()
         print(context['object_list']) 
         context['title'] = 'survey list'
-        context['list_head'] = 'survey list'
+        context['h3'] = 'survey list'
         return context
 
     def post(self, request, *args, **kwargs):

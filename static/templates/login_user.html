@@ -7,12 +7,17 @@
 {% block logout %}
 {% endblock logout %}    
 
+
+{% block h3-title %}
+{{h3}}
+{% endblock h3-title %} 
+
 {% block body %}
 
 <div class="container">
     <form action="{% url 'users:login_user' %}" method="post">
         {% csrf_token %}
-        <h3>login</h3>
+        
         <!-- {{form.as_p}} -->
         <table>
             <tr>

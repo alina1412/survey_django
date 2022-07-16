@@ -17,8 +17,8 @@ urlpatterns = [
 
     # path('register/', views.RegisterView.as_view(), name='register'),
     # path('login/', views.LoginView.as_view(), name='login'),
-    
-    path('answer/', views.AnswerPageView.as_view(), name='answer')
+    path('add-choice/<int:question_id>/', views.AddChoiceView.as_view(), name='add_choice'),
+    path('answer/<int:survey_id>/', views.VotedAnswerView.as_view(), name='answer')
     
 
 ]

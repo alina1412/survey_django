@@ -1,3 +1,4 @@
+import math
 from django.db import models
 
 
@@ -41,7 +42,7 @@ class Choice(models.Model):
         on_delete=models.CASCADE,
     )
     def __str__(self):
-        return self.choice
+        return self.choice[:14]
 
 
 class Answer(models.Model):
@@ -52,7 +53,7 @@ class Answer(models.Model):
         on_delete=models.CASCADE,
     )
     def __str__(self):
-        return self.answer[:14]
+        return self.answer[:14] if self.answer else None
 
 
 # class Product(models.Model):
@@ -62,3 +63,12 @@ class Answer(models.Model):
 #     # null - True - it can be empty in db
 #     price = models.DecimalField(decimal_places=2, max_digits=1000)
 #     summary = models.TextField(default='ok')
+
+
+# class VotesModel(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     choice = models.CharField(max_length=200, null=True, blank=True)
+#     question = models.ForeignKey(
+#         Question,
+#         on_delete=models.CASCADE,
+#     )

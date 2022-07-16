@@ -1,17 +1,31 @@
 {% extends 'base.html' %}
 
+{% block h3-title %}
+{{h3}}
+{% endblock h3-title %} 
+
 {% block body %}
 
 <div class="container">
-    <form action="{% url 'survey:answer' %}" method="post">
+     
+    <form method="post">
         {% csrf_token %}
-        <h3>answer</h3>
-        <table class="table">{{ form.as_table }}</table>
+        
+            {% for pair in questions %}
+            <tr>
+                <h5>{{pair.0.question}}</h5>
+                {% for choice in pair.1 %}
+                    <p><input name="q{{pair.0.id}}choice" type="radio" value="{{choice}}"> {{choice}}</p>
+                {% endfor %}    
+            </tr> 
+             <hr>
+            {% endfor %}
 
         
-        <button type="button" class="btn btn-primary"> submit </button>
+        <button type="submit" class="btn btn-primary"> submit </button>
     
     </form>
+ 
 </div>
 
 {% endblock %}

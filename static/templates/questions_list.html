@@ -8,7 +8,10 @@
 
 <div class="container">
     
-        <h3>{{list_head}}</h3>
+        {% block h3-title %}
+        {{h3}}
+        {% endblock h3-title %} 
+
         <br>
         {% if not object_list %}
         <p> Empty </p>
