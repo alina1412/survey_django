@@ -54,8 +54,8 @@ STATICFILES_DIRS = [('templates', f'{BASE_DIR}/static/templates/'),
                     ('css', f'{BASE_DIR}/static/css/'), 
                     ('images', f'{BASE_DIR}/static/images/')] 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
 
 TEMPLATES = [
     {

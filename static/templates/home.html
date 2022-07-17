@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block suggest-to-log %}
 {% if auth %}
@@ -24,16 +25,14 @@
 {% block body %}
 <div class="container">
         
-        <p>Log in to continue! See you!</p>
+        <p>Answer someone's survey or Login to create your own surveys!</p>
 
-        <img src="media/example.jpg">
-        <img src="example.jpg">
-        <img src="images/example.jpg">
-        <img src='survey_app/images/example.jpg'>
-        <img src='static/survey_app/images/example.jpg'>
-        <img src='static/images/example.jpg'>
-        <img src='static/example.jpg'>
-        <img src='survey_app/example.jpg'>
+        <!-- <img src="{% static 'survey_app/images/example.jpg' %}" class="img-fluid"> -->
+        Example of pages for registered users:
+        <img src="{% static 'images/example.jpg' %}" class="img-fluid border border-secondary">
+        
+        
+
         
         
 </div>
