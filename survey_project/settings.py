@@ -53,10 +53,22 @@ STATIC_ROOT = BASE_DIR / 'static'
 STATICFILES_DIRS = [('templates', f'{BASE_DIR}/static/templates/'), 
                     ('css', f'{BASE_DIR}/static/css/'), 
                     ('images', f'{BASE_DIR}/static/images/')] 
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'static/', 'static/templates/', 'static/css/', 'static/images/'], #  
+        'DIRS': [BASE_DIR / 'static/', 
+                            'static/templates/',
+                            'static/css/',
+                            'static/images/',
+                            # 'survey_app/templates/',
+                            # 'survey_app/',
+                            'survey_app/templates/survey_app/',
+                            'static/survey_app/images/'
+                            ], #  
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
