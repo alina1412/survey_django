@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block h3-title %}
+{{h3}}
+{% endblock h3-title %} 
+
+{% block body %}
+
+<div class="container">
+    
+        {% if not object_list %}
+        <p> Empty </p>
+        
+        {% else %}
+        <table class="table">
+            <tr>
+            <th>question</th>
+            <th>answers</th>
+            </tr>
+
+            {% for item in object_list %}
+                <tr>
+                    <td> {{ item.title }} </td>
+                    <td> {% for choice in item.choices %}
+                        <li> {{ choice.0 }} - {{ choice.1 }} </li>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+        <p></p>
+       
+</div>
+
+{% endblock %}

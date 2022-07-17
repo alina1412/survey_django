@@ -2,6 +2,7 @@
 
 import logging
 from typing import Optional, Type
+from django import urls
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -17,12 +18,23 @@ from .forms import *
 from .questions_views import *
 from .survey_views import *
 from django.views.generic import TemplateView, DetailView, ListView, CreateView
- 
+
+from .views_menu import menu, menu_param
+
 
 def home_view(request):
-    return HttpResponse("Hello World")
+    # img_path = reverse('static', '/example.jpg')
+    # print(img_path)
 
+    return render(request, 'home.html', {'h3': 'To make and answer surveys is easy',
+                    'image': "img_path", "menu": menu, "menu_param": menu_param})
+    # return HttpResponse("Hello World")
 
+def logout_view(request):
+    logout(request)
+    # print('logged out')
+    messages.success(request, 'logged out')
+    return HttpResponseRedirect(reverse('survey:home'))
 # def create_view(request):
 #     form = CreateNewList()
 #     return render(request, 'create.html', {'form': form})
@@ -31,7 +43,7 @@ def home_view(request):
 class VotedAnswerView(TemplateView):
     """answer/<int:survey_id>/    answer"""
     template_name = 'answer.html'
-    extra_context = {'h3': 'fill the survey, please', 'title': 'fill answer'}
+    extra_context = {'h3': 'fill the survey, please', 'title': 'fill answer', "menu": menu}
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -50,7 +62,6 @@ class VotedAnswerView(TemplateView):
         a.save()
 
     def post(self, request, *args, **kwargs):
-        # NUM = 1
         context = self.get_context_data()
         # len_questions = len(context['questions'])
         # print(context['questions'])
@@ -60,10 +71,11 @@ class VotedAnswerView(TemplateView):
                 print(choice, choice in opts)
                 question = Question.objects.get(id=q.id)
                 self.save_choice(question, choice)
+                messages.success(self.request, 'voted')
             else:
                 raise Http404("choice incorrect")
 
-        return HttpResponse(f"--{choice}")
+        return HttpResponseRedirect(reverse('survey:home'))
 
   
   
@@ -74,10 +86,11 @@ class AddChoiceView(CreateView):
     # fields = ['question']
     form_class = AddChoiceForm
     template_name = 'add_template.html'
-    extra_context = {'h3': 'add answer choice', 'title': 'answer choice'}
+    extra_context = {'h3': 'add answer choice', 'title': 'answer choice', "menu": menu}
     
     def get_success_url(self):
-        return reverse_lazy('survey:question_detail', kwargs={'pk': self.kwargs['question_id']}) #TODO  
+        messages.success(self.request, 'added')
+        return reverse_lazy('survey:question_detail', kwargs={'question_id': self.kwargs['question_id']}) 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

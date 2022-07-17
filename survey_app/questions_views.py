@@ -14,18 +14,17 @@ from django.views.generic import TemplateView, DetailView, ListView, CreateView
 
 from .models import *
 from .forms import *
-
+from .views_menu import menu, menu_param
 
 class AddQuestionView(CreateView):
     """add-question/<int:survey_id>/', name='add_question'"""
-    # model = Question
-    # fields = ['question']
     form_class = AddQuestionForm
     template_name = 'add_template.html'
-    extra_context = {'h3': 'add a question', 'title': 'add question'}
+    extra_context = {'h3': 'add a question', 'title': 'add question', "menu": menu}
 
     def get_success_url(self):
-        return reverse_lazy('survey:question_detail', kwargs={'pk': self.object.pk})
+        messages.success(self.request, 'added')
+        return reverse_lazy('survey:question_detail', kwargs={'question_id': self.object.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -49,18 +48,20 @@ class DetailQuestionView(DetailView):
     "'question-detail/<int:pk>/', name='question_detail'"
     template_name = "queston_detail.html"
     model = Question
-    extra_context = {'title': 'question'}
+    extra_context = {'title': 'question', "menu": menu}
+    pk_url_kwarg = 'question_id'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        data = Choice.objects.filter(question=self.kwargs['pk'])
-        q = Question.objects.get(pk=self.kwargs['pk'])
+        data = Choice.objects.filter(question=self.kwargs['question_id'])
+        q = Question.objects.get(pk=self.kwargs['question_id'])
         # print(q)
         context['h3'] = q.question
         context['question_id'] = q.id
         context['data'] = data
         return context
 
+  # default: pk
 
 # class ListQuestionsView(ListView):
 #     template_name = 'questions_list.html'

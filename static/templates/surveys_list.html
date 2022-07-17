@@ -21,25 +21,24 @@
                         <th>surveys</th>
                         
                         <th>to delete</th>
+                        <th>results</th>
                         </tr>
                         {% for item in object_list %}
                         <tr>
                                 <td><a href="{% url 'survey:survey_detail' pk=item.id %}"> 👁 </a></td>
                                 <td> {{item.title}}</td>
                                 <td><input type="checkbox" name="{{item.id}}" id="{{item.id}}"></td>
+                                <td><a href="{% url 'survey:results' survey_id=item.id %}"> ✅ </a></td>
                         </tr>
                         {% endfor %}
                         <tr>
                                 <td></td>
                                 <td>
-                                <input type="submit" name="download" value="download my list" >  </input>
                                 </td>        
                                 
-                            
                                 <td>
-
              <button type="submit" name="delete"> delete selected</button>
-                                   </td>
+                                </td>
                         </tr>
                 </table>
                 <p></p>

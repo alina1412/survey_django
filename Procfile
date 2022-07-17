@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn books.wsgi
+web: gunicorn survey_app.wsgi

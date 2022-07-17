@@ -22,7 +22,7 @@
                 </tr>
                 {% for item in data %}
                 <tr>
-                        <td><a href="{% url 'survey:question_detail' pk=item.id %}"> 👁 </a></td>
+                        <td><a href="{% url 'survey:question_detail' question_id=item.id %}"> 👁 </a></td>
                         <td> {{item.question}}</td>
                         <td><input type="checkbox" name="{{item.id}}" id="{{item.id}}"></td>
                 </tr>

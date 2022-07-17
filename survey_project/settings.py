@@ -44,13 +44,19 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'survey_project.urls'
-STATICFILES_DIRS = [f'{BASE_DIR}/static/templates/', 
-                    f'{BASE_DIR}/static/css/', 
-                    f'{BASE_DIR}/static/img/'] 
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.0/howto/static-files/
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'
+
+STATICFILES_DIRS = [('templates', f'{BASE_DIR}/static/templates/'), 
+                    ('css', f'{BASE_DIR}/static/css/'), 
+                    ('images', f'{BASE_DIR}/static/images/')] 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'static/', 'static/templates/'], # 'static/css/', 'static/img/'
+        'DIRS': [BASE_DIR / 'static/', 'static/templates/', 'static/css/', 'static/images/'], #  
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -159,10 +165,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

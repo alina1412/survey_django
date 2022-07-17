@@ -16,8 +16,8 @@ class Survey(models.Model):
     def __str__(self):
         return f'{self.id} {self.title}'
 
-    def get_absolute_url(self):
-        return reverse('question_detail', kwargs={'pk': self.pk})
+    # def get_absolute_url(self):
+    #     return reverse('question_detail', kwargs={'pk': self.pk})
 
 
 class Question(models.Model):
@@ -53,7 +53,7 @@ class Answer(models.Model):
         on_delete=models.CASCADE,
     )
     def __str__(self):
-        return self.answer[:14] if self.answer else None
+        return self.answer[:14] if self.answer else ""
 
 
 # class Product(models.Model):
