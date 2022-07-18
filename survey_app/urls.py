@@ -5,7 +5,7 @@ from . import views
 
 app_name = 'survey_app'
 urlpatterns = [
-    path('', views.home_view, name='home'),
+    path('home/', views.home_view, name='home'),
     path('add-survey/', views.AddSurveyView.as_view(), name='add_survey'),
     path('survey-detail/<int:pk>/', views.DetailSurveyView.as_view(), name='survey_detail'),
     path('surveys/', views.OwnedListSurveysView.as_view(), name='survey_list'),
