@@ -3,24 +3,23 @@ logger = logging.getLogger(__name__)
 
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
- 
-from django.contrib.auth import authenticate, login, logout
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404
 from django.contrib import messages
 
 from .models import *
 from .forms import *
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, DetailView, ListView, CreateView
+from django.views.generic import DetailView, ListView, CreateView
 
 from .views_menu import menu, menu_log, menu_notlog, get_menu
+from .download import AttachFile
+from .view_mixin import LoginRequiredMixin
 
-class AddSurveyView(CreateView): # LoginRequiredMixin
+class AddSurveyView(LoginRequiredMixin, CreateView):
     """'add-survey/' name='add_survey'"""
     template_name = "add_template.html"
     form_class = CreateSurvey
-    # print( menu_log + menu)
-    extra_context = {'title': 'add survey', 'h3': 'add a survey', "menu": menu_log + menu}
+    # print( menu + menu_log)
+    extra_context = {'title': 'add survey', 'h3': 'add a survey', "menu": menu + menu_log}
     # context_object_name = 'object_list'
 
     def get_success_url(self): 
@@ -33,12 +32,11 @@ class AddSurveyView(CreateView): # LoginRequiredMixin
         return super().form_valid(form)
 
 
-from .download import AttachFile
-class DetailSurveyView(DetailView):
+class DetailSurveyView(LoginRequiredMixin, DetailView):
     """'survey-detail/<int:survey_id>/', name='survey_detail'"""
     model = Survey
     template_name = 'survey_detail.html'
-    extra_context = {'title': 'survey detail', "menu": menu_log + menu}
+    extra_context = {'title': 'survey detail', "menu": menu + menu_log}
     pk_url_kwarg = 'survey_id'  # default: pk
 
     def get_context_data(self, **kwargs):
@@ -70,18 +68,17 @@ class DetailSurveyView(DetailView):
         AF = AttachFile(item_list)
         return AF.attach_file()
 
-class OwnedListSurveysView(ListView):
+class OwnedListSurveysView(LoginRequiredMixin, ListView):
     """'surveys/', name='survey_list'"""
     template_name = "surveys_list.html"
     model = Survey
     context_object_name = 'object_list'
-    extra_context = {"menu": menu_log + menu}
+    extra_context = {"menu": menu + menu_log}
 
     def get_queryset(self):
         return Survey.objects.\
                         select_related('owner').\
                         filter(owner__id = self.request.user.id)  
-                      #  
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -119,7 +116,7 @@ class SurveyToPassView(ListView):
         return context
 
 
-class ResultsView(ListView):
+class ResultsView(LoginRequiredMixin, ListView):
     template_name = "results.html"
     extra_context = {'h3': 'results of a survey', 'title': 'results'}
 

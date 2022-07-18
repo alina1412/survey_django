@@ -1,21 +1,20 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView
 
 from .forms import *
 from .models import *
 from .views_menu import menu, menu_log
+from .view_mixin import LoginRequiredMixin
 
-class AddQuestionView(CreateView):
+class AddQuestionView(LoginRequiredMixin, CreateView):
     """add-question/<int:survey_id>/', name='add_question'"""
     form_class = AddQuestionForm
     template_name = 'add_template.html'
-    extra_context = {'h3': 'add a question', 'title': 'add question', "menu": menu_log + menu}
+    extra_context = {'h3': 'add a question', 'title': 'add question', "menu": menu + menu_log}
 
     def get_success_url(self):
         messages.success(self.request, 'added')
@@ -39,11 +38,11 @@ class AddQuestionView(CreateView):
 
 
 
-class DetailQuestionView(DetailView):
+class DetailQuestionView(LoginRequiredMixin, DetailView):
     "'question-detail/<int:pk>/', name='question_detail'"
     template_name = "queston_detail.html"
     model = Question
-    extra_context = {'title': 'question', "menu": menu_log + menu}
+    extra_context = {'title': 'question', "menu": menu + menu_log}
     pk_url_kwarg = 'question_id'    # default: pk
 
     def get_context_data(self, **kwargs):

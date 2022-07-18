@@ -31,7 +31,7 @@ menu_log = [
 
 def get_menu(request):
     if request.user.is_authenticated:
-        return menu_log + menu
+        return menu + menu_log
     return menu_notlog + menu
 
 # menu_param = [
