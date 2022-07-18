@@ -15,7 +15,7 @@ class AddQuestionView(CreateView):
     """add-question/<int:survey_id>/', name='add_question'"""
     form_class = AddQuestionForm
     template_name = 'add_template.html'
-    extra_context = {'h3': 'add a question', 'title': 'add question', "menu": menu + menu_log}
+    extra_context = {'h3': 'add a question', 'title': 'add question', "menu": menu_log + menu}
 
     def get_success_url(self):
         messages.success(self.request, 'added')
@@ -43,8 +43,8 @@ class DetailQuestionView(DetailView):
     "'question-detail/<int:pk>/', name='question_detail'"
     template_name = "queston_detail.html"
     model = Question
-    extra_context = {'title': 'question', "menu": menu + menu_log}
-    pk_url_kwarg = 'question_id'
+    extra_context = {'title': 'question', "menu": menu_log + menu}
+    pk_url_kwarg = 'question_id'    # default: pk
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -55,5 +55,3 @@ class DetailQuestionView(DetailView):
         context['question_id'] = q.id
         context['data'] = data
         return context
-
-  # default: pk
