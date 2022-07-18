@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
 
+{% block title %}
+<title>{{title}}</title> 
+{% endblock title %} 
+
+
 {% block h3-title %}
+{% if questions %}
 {{h3}}
+{% endif %}
 {% endblock h3-title %} 
+
 
 {% block body %}
 
@@ -10,7 +18,11 @@
      
     <form method="post">
         {% csrf_token %}
-        
+
+        {% if not questions %}
+        <p>Creator hasn't added questions yet</p>
+        {% endif %}
+
             {% for pair in questions %}
             <tr>
                 <h5>{{pair.0.question}}</h5>

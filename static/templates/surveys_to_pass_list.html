@@ -4,13 +4,16 @@
 <title>{{title}}</title> 
 {% endblock title %} 
 
+{% block h3-title %}
+{{h3}}
+{% endblock h3-title %} 
+
+
 {% block body %}
 
 <div class="container">
-
         {% if not object_list %}
         <p> Empty </p>
-        
         {% else %}
 
         <form method="post">

@@ -1,14 +1,27 @@
 menu = [
+    {  "url_name": 'survey:login',
+        "descr": 'login'
+    },
+    {  "url_name": 'survey:register',
+        "descr": 'register'
+    },
+    {  "url_name": 'survey:surveys_to_pass',
+        "descr": 'surveys to pass'
+    },
+    ]
+menu_log = [
     {  "url_name": 'survey:survey_list',
-        "descr": 'surveys'
+        "descr": 'created surveys'
     },
     {  "url_name": 'survey:add_survey',
         "descr": 'add survey'
+    },    
+    {  "url_name": 'survey:logout',
+        "descr": 'logout'
     },
-    {  "url_name": 'survey:surveys_to_pass',
-        "descr": 'survey to pass'
-    },
-]
+
+    ]
+
 menu_param = [
     {  "url_name": '/survey/add_question/1',
         "descr": 'add_question_to_the_first_survey'

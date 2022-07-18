@@ -18,13 +18,14 @@ from .forms import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, DetailView, ListView, CreateView
 
-from .views_menu import menu, menu_param
+from .views_menu import menu, menu_param, menu_log
 
 class AddSurveyView(CreateView): # LoginRequiredMixin
     """'add-survey/' name='add_survey'"""
     template_name = "add_template.html"
     form_class = CreateSurvey
-    extra_context = {'title': 'add survey', 'h3': 'add a survey', "menu": menu}
+    # print( menu + menu_log)
+    extra_context = {'title': 'add survey', 'h3': 'add a survey', "menu": menu + menu_log}
     # context_object_name = 'object_list'
 
     def get_success_url(self): 
@@ -41,7 +42,7 @@ class DetailSurveyView(DetailView):
     """'survey-detail/<int:pk>/', name='survey_detail'"""
     model = Survey
     template_name = 'survey_detail.html'
-    extra_context = {'title': 'survey detail', "menu": menu}
+    extra_context = {'title': 'survey detail', "menu": menu + menu_log}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -69,7 +70,7 @@ class OwnedListSurveysView(ListView):
     template_name = "surveys_list.html"
     model = Survey
     context_object_name = 'object_list'
-    extra_context = {"menu": menu}
+    extra_context = {"menu": menu + menu_log}
 
     def get_queryset(self):
         return Survey.objects.\
@@ -100,21 +101,23 @@ class SurveyToPassView(ListView):
     template_name = "surveys_to_pass_list.html"
     model = Survey
     context_object_name = 'object_list'
-    extra_context = {"menu": menu, 'h3': 'survey you can pass', 'title': 'to pass'}
+    extra_context = {'h3': 'survey you can pass', 'title': 'to pass'}
 
     def get_queryset(self):
         return Survey.objects.filter()  
         
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = self.get_queryset()
+        context["menu"] = menu
+        if self.request.user.is_authenticated:
+            context["menu"] = menu + menu_log
         return context
 
 
 class ResultsView(ListView):
     template_name = "results.html"
-    extra_context = {"menu": menu, 'h3': 'results of a survey', 'title': 'results'}
+    extra_context = {'h3': 'results of a survey', 'title': 'results'}
 
     def get_qset_questions_of_survey(self, survey_id):
         return Question.objects.\
@@ -157,4 +160,7 @@ class ResultsView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = self.get_queryset()
+        context["menu"] = menu
+        if self.request.user.is_authenticated:
+            context["menu"] = menu + menu_log
         return context

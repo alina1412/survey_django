@@ -1,21 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block suggest-to-log %}
-{% if auth %}
-        {% else %}
-        {% include 'templates/suggest-to-log.html' %}
-        {% endif %}
-{% endblock suggest-to-log %}
-
-
-{% block logout %}
-        {% if auth %}
-        {% include 'templates/logout.html' %}
-        {% else %}
-        {% endif %}
-{% endblock logout %} 
-
 
 {% block h3-title %}
 {{h3}}
