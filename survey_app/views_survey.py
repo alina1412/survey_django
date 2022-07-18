@@ -13,14 +13,14 @@ from .forms import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, DetailView, ListView, CreateView
 
-from .views_menu import menu, menu_log
+from .views_menu import menu, menu_log, menu_notlog, get_menu
 
 class AddSurveyView(CreateView): # LoginRequiredMixin
     """'add-survey/' name='add_survey'"""
     template_name = "add_template.html"
     form_class = CreateSurvey
-    # print( menu + menu_log)
-    extra_context = {'title': 'add survey', 'h3': 'add a survey', "menu": menu + menu_log}
+    # print( menu_log + menu)
+    extra_context = {'title': 'add survey', 'h3': 'add a survey', "menu": menu_log + menu}
     # context_object_name = 'object_list'
 
     def get_success_url(self): 
@@ -33,18 +33,20 @@ class AddSurveyView(CreateView): # LoginRequiredMixin
         return super().form_valid(form)
 
 
+from .download import AttachFile
 class DetailSurveyView(DetailView):
-    """'survey-detail/<int:pk>/', name='survey_detail'"""
+    """'survey-detail/<int:survey_id>/', name='survey_detail'"""
     model = Survey
     template_name = 'survey_detail.html'
-    extra_context = {'title': 'survey detail', "menu": menu + menu_log}
+    extra_context = {'title': 'survey detail', "menu": menu_log + menu}
+    pk_url_kwarg = 'survey_id'  # default: pk
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        surv = Survey.objects.get(id=self.kwargs['pk'])
+        surv = Survey.objects.get(id=self.kwargs['survey_id'])
         if not surv:
             return Http404
-        questions = Question.objects.filter(survey=self.kwargs['pk']) # ??
+        questions = Question.objects.filter(survey=self.kwargs['survey_id'])
         context['data'] = questions
         context['survey'] = surv
         context['h3'] = surv.title
@@ -53,19 +55,27 @@ class DetailSurveyView(DetailView):
     def post(self, request, *args, **kwargs):
         if 'delete' in request.POST:
             # print("delete")
-            for item in Question.objects.filter(survey=self.kwargs['pk']):
+            for item in Question.objects.filter(survey=self.kwargs['survey_id']):
                 x = request.POST.get(str(item.id), 'off')
                 if x == 'on':
                     item.delete()
-        return redirect('survey_app:survey_detail', pk=self.kwargs['pk'])
 
+        if 'download' in request.POST:
+            questions = Question.objects.filter(survey=self.kwargs['survey_id'])
+            return self.get_file_to_attach(questions)
+
+        return redirect('survey_app:survey_detail', survey_id=self.kwargs['survey_id'])
+    
+    def get_file_to_attach(self, item_list):
+        AF = AttachFile(item_list)
+        return AF.attach_file()
 
 class OwnedListSurveysView(ListView):
     """'surveys/', name='survey_list'"""
     template_name = "surveys_list.html"
     model = Survey
     context_object_name = 'object_list'
-    extra_context = {"menu": menu + menu_log}
+    extra_context = {"menu": menu_log + menu}
 
     def get_queryset(self):
         return Survey.objects.\
@@ -104,9 +114,8 @@ class SurveyToPassView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = self.get_queryset()
-        context["menu"] = menu
-        if self.request.user.is_authenticated:
-            context["menu"] = menu + menu_log
+        context["menu"] = menu_notlog + menu
+        context["menu"] = get_menu(self.request)
         return context
 
 
@@ -155,7 +164,5 @@ class ResultsView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = self.get_queryset()
-        context["menu"] = menu
-        if self.request.user.is_authenticated:
-            context["menu"] = menu + menu_log
+        context["menu"] = get_menu(self.request)
         return context

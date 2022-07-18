@@ -29,7 +29,7 @@
                         </tr>
                         {% for item in object_list %}
                         <tr>
-                                <td><a href="{% url 'survey_app:survey_detail' pk=item.id %}"> 👁 </a></td>
+                                <td><a href="{% url 'survey_app:survey_detail' survey_id=item.id %}"> 👁 </a></td>
                                 <td> {{item.title}}</td>
                                 <td><input type="checkbox" name="{{item.id}}" id="{{item.id}}"></td>
                                 <td><a href="{% url 'survey_app:results' survey_id=item.id %}"> ✅ </a></td>

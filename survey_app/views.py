@@ -14,16 +14,17 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 from .forms import *
 from .models import *
-from .views_menu import menu, menu_log
+from .views_menu import menu, menu_log, menu_notlog, get_menu
 from .views_choices_answers import *
 from .views_survey import *
 from .views_questions import *
 
 
 def home_view(request):
+    menu_copy = get_menu(request)
     return render(request, 'home.html', 
             {'h3': 'To make and answer surveys is easy',
-                    'image': "img_path", "menu": menu})
+                    'image': "img_path", "menu": menu_copy})
     # return HttpResponse("Hello World")
 
 def logout_view(request):
@@ -35,7 +36,7 @@ class RegisterView(CreateView):
     template_name = "register.html"
     form_class = UserCreationForm
     model = User
-    extra_context = {'title': 'register', 'h3': 'Register for creating surveys', "menu": menu}
+    extra_context = {'title': 'register', 'h3': 'Register for creating surveys', "menu": menu_notlog + menu}
 
     def get_success_url(self): 
         messages.success(self.request, 'registered')
@@ -52,7 +53,7 @@ class RegisterView(CreateView):
 class SurveyLoginView(LoginView):
     template_name = "login.html"
     form_class = AuthenticationForm
-    extra_context = {'title': 'login', 'h3': 'Login', "menu": menu}
+    extra_context = {'title': 'login', 'h3': 'Login', "menu": menu_notlog + menu}
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

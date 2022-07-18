@@ -10,7 +10,7 @@ from django.views.generic import TemplateView, CreateView
 
 from .forms import AddChoiceForm
 from .models import *
-from .views_menu import menu, menu_log
+from .views_menu import menu, menu_log, get_menu
 
 
 class VotedAnswerView(TemplateView):
@@ -21,8 +21,7 @@ class VotedAnswerView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["menu"] = menu
-        if self.request.user.is_authenticated:
-            context["menu"] = menu + menu_log
+        context["menu"] = get_menu(self.request)
 
         context['survey_id'] = self.kwargs['survey_id']
         s = Survey.objects.get(id=self.kwargs['survey_id'])
@@ -56,7 +55,7 @@ class AddChoiceView(CreateView):
     """add-choice/<int:question_id>', name='add_choice'"""
     form_class = AddChoiceForm
     template_name = 'add_template.html'
-    extra_context = {'h3': 'add answer choice', 'title': 'answer choice', "menu": menu + menu_log}
+    extra_context = {'h3': 'add answer choice', 'title': 'answer choice', "menu": menu_log + menu}
     
     def get_success_url(self):
         messages.success(self.request, 'added')

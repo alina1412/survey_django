@@ -1,14 +1,21 @@
-menu = [
+menu_notlog = [
+    {  "url_name": 'survey_app:home',
+        "descr": 'home'
+    },
     {  "url_name": 'survey_app:login',
         "descr": 'login'
     },
     {  "url_name": 'survey_app:register',
         "descr": 'register'
     },
+
+    ]
+menu = [
     {  "url_name": 'survey_app:surveys_to_pass',
         "descr": 'surveys to pass'
     },
-    ]
+]
+
 menu_log = [
     {  "url_name": 'survey_app:survey_list',
         "descr": 'created surveys'
@@ -21,6 +28,11 @@ menu_log = [
     },
 
     ]
+
+def get_menu(request):
+    if request.user.is_authenticated:
+        return menu_log + menu
+    return menu_notlog + menu
 
 # menu_param = [
 #     {  "url_name": '/survey_app/add_question/1',
