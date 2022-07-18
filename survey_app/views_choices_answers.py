@@ -10,7 +10,7 @@ from django.views.generic import TemplateView, CreateView
 
 from .forms import AddChoiceForm
 from .models import *
-from .views_menu import menu, menu_param, menu_log
+from .views_menu import menu, menu_log
 
 
 class VotedAnswerView(TemplateView):

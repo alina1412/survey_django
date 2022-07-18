@@ -13,7 +13,7 @@ from .forms import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, DetailView, ListView, CreateView
 
-from .views_menu import menu, menu_param, menu_log
+from .views_menu import menu, menu_log
 
 class AddSurveyView(CreateView): # LoginRequiredMixin
     """'add-survey/' name='add_survey'"""

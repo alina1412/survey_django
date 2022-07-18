@@ -9,7 +9,7 @@ from django.views.generic import DetailView, CreateView
 
 from .forms import *
 from .models import *
-from .views_menu import menu, menu_param, menu_log
+from .views_menu import menu, menu_log
 
 class AddQuestionView(CreateView):
     """add-question/<int:survey_id>/', name='add_question'"""

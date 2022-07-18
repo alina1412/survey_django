@@ -14,7 +14,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 from .forms import *
 from .models import *
-from .views_menu import menu, menu_param, menu_log
+from .views_menu import menu, menu_log
 from .views_choices_answers import *
 from .views_survey import *
 from .views_questions import *
