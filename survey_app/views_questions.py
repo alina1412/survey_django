@@ -1,19 +1,14 @@
 import logging
-from typing import Optional, Type
 logger = logging.getLogger(__name__)
 
-from django.conf import settings
-from django.shortcuts import render, redirect
-from django.urls import reverse, reverse_lazy
- 
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, CreateView
 
-from django.views.generic import TemplateView, DetailView, ListView, CreateView
-
-from .models import *
 from .forms import *
+from .models import *
 from .views_menu import menu, menu_param, menu_log
 
 class AddQuestionView(CreateView):

@@ -1,11 +1,6 @@
-
-
 import logging
-from typing import Optional, Type
 logger = logging.getLogger(__name__)
 
-from django.db.models import Count
-from django.conf import settings
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
  

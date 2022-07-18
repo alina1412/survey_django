@@ -1,4 +1,3 @@
-
 from django.urls import path
 
 from . import views
@@ -25,5 +24,3 @@ urlpatterns = [
     path('results/<int:survey_id>/', views.ResultsView.as_view(), name='results'),
 
 ]
-
-

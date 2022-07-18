@@ -3,6 +3,7 @@ logger = logging.getLogger(__name__)
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, CreateView
