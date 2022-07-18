@@ -12,8 +12,8 @@ def home_redirect(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('survey_app/', include('survey_app.urls')),
     path('', home_redirect),
-    path('survey_app/', include('survey_app.urls'))
 ]
 
 # if settings.DEBUG:

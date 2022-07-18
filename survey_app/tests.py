@@ -31,9 +31,9 @@ def test_user(auto_login_user):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
         'param', [
-            'survey:survey_list',
-            'survey:register',
-            'survey:login'
+            'survey_app:survey_list',
+            'survey_app:register',
+            'survey_app:login'
         ]
     )
 def test_get200_request(param, client):

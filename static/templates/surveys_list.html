@@ -17,7 +17,7 @@
         
         {% else %}
 
-        <form action="{% url 'survey_app:survey_list' %}" method="post">
+        <form method="post">
                 {% csrf_token %}
                 <table class="table">
                         <tr>
