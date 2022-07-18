@@ -1,7 +1,6 @@
-
-from pathlib import WindowsPath
-from django.test import SimpleTestCase, TestCase, Client
-from django import urls
+# from pathlib import WindowsPath
+# from django.test import SimpleTestCase, TestCase, Client
+# from django import urls
 import pytest
 
 import logging
@@ -31,7 +30,8 @@ def test_user(auto_login_user):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
         'param', [
-            'survey_app:survey_list',
+            'survey_app:home',
+            'survey_app:surveys_to_pass',
             'survey_app:register',
             'survey_app:login'
         ]
@@ -51,14 +51,95 @@ def test_get200_request(param, client):
 #    assert b"login" in response.content
    
 
-# @pytest.mark.django_db
-# def test_books_list(auto_login_user):
-#     client, user = auto_login_user
-#     response = client.get('/shelves/table_books/')
-#     assert response.status_code == 200
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+        'param', [
+            'survey_app:add_survey',
+            'survey_app:register',
+            'survey_app:login',
+            'survey_app:survey_list',
+        ]
+    )
+def test_url_list(param, auto_login_user):
+    client, user = auto_login_user
+    response = client.get(reverse(param))
+    assert response.status_code == 200
 #     assert b'table of books' in response.content
 #     assert b'example_author_' in response.content
 
+@pytest.mark.django_db
+def test_pages_with_db(auto_login_user):
+    client, user = auto_login_user
+
+    def make_survey():
+        Survey(title='Survey1', owner=user).save()
+        surv = Survey.objects.filter().first()
+        count = Survey.objects.all().count()
+        assert count == 1
+        return surv
+
+    survey = make_survey()
+
+    def make_question(surv):
+        Question(question="first?", survey=surv).save()
+        quest = Question.objects.filter().first()
+        count = Question.objects.all().count()
+        assert count == 1
+        return quest
+
+    question = make_question(survey)
+
+    def add_surv_by_post():
+        context = dict(title = "Survey2")
+        response = client.post(reverse('survey_app:add_survey'), context, follow=True)
+        count = Survey.objects.all().count()
+        assert count == 2
+
+    add_surv_by_post()
+
+    def add_question_by_post(surv):
+        context = dict(question = "second?")
+        response = client.post(reverse('survey_app:add_question', kwargs={'survey_id': surv.id}), context, follow=True)
+        count = Question.objects.all().count()
+        assert count == 2
+
+    add_question_by_post(survey)
+
+    def add_choice_by_post(question):
+        context = dict(choice = "-choice1")
+        response = client.post(reverse('survey_app:add_choice', kwargs={'question_id': question.id}), context, follow=True)
+        count = Choice.objects.all().count()
+        assert count == 1
+
+    add_choice_by_post(question)
+
+    def resp200_survey_detail(survey):
+        response = client.get(reverse('survey_app:survey_detail', kwargs={'survey_id': survey.id}), follow=True)
+        assert response.status_code == 200
+        
+        assert b'Survey1' in response.content
+        assert b'Survey2' not in response.content
+
+    resp200_survey_detail(survey)
+
+    def resp200_question_detail(question):
+        response = client.get(reverse('survey_app:question_detail', kwargs={'question_id': question.id}), follow=True)
+        assert response.status_code == 200
+        
+        assert b'first?' in response.content
+        assert b'second?' not in response.content
+
+    resp200_question_detail(question)
+    # response = client.get(reverse('param'))
+
+    def delete_question_by_checkbox(survey, question):
+        assert Question.objects.all().count() == 2
+        data = {'delete': True, str(question.id): 'on'}
+        response = client.post(reverse('survey_app:survey_detail', kwargs={'survey_id': survey.id}), data=data, follow=True)
+        assert response.status_code == 200
+        assert Question.objects.all().count() == 1
+
+    delete_question_by_checkbox(survey, question)
 
 # @pytest.mark.parametrize(
 #    'param, template_name', [
