@@ -22,7 +22,7 @@
                 </tr>
                 {% for item in data %}
                 <tr>
-                        <td><a href="{% url 'survey:question_detail' question_id=item.id %}"> 👁 </a></td>
+                        <td><a href="{% url 'survey_app:question_detail' question_id=item.id %}"> 👁 </a></td>
                         <td> {{item.question}}</td>
                         <td><input type="checkbox" name="{{item.id}}" id="{{item.id}}"></td>
                 </tr>
@@ -37,7 +37,7 @@
                 </tr>
         </table>
 
-        <p><a href="{% url 'survey:add_question' survey_id=survey.id %}"> Add a question </a></p>
+        <p><a href="{% url 'survey_app:add_question' survey_id=survey.id %}"> Add a question </a></p>
 
 </div>
 

@@ -26,7 +26,7 @@
                         {% for item in object_list %}
                         <tr>
                                 <td> {{item.title}}</td>
-                                <td><a href="{% url 'survey:answer' survey_id=item.id %}"> 👁 </a></td>
+                                <td><a href="{% url 'survey_app:answer' survey_id=item.id %}"> 👁 </a></td>
                                 
                         </tr>
                         {% endfor %}

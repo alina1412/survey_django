@@ -25,7 +25,7 @@ class AddSurveyView(CreateView): # LoginRequiredMixin
 
     def get_success_url(self): 
         messages.success(self.request, 'added')
-        return reverse('survey:survey_list')
+        return reverse('survey_app:survey_list')
 
     def form_valid(self, form):
         form.instance.owner = User.objects.get(id=self.request.user.id)
@@ -57,7 +57,7 @@ class DetailSurveyView(DetailView):
                 x = request.POST.get(str(item.id), 'off')
                 if x == 'on':
                     item.delete()
-        return redirect('survey:survey_detail', pk=self.kwargs['pk'])
+        return redirect('survey_app:survey_detail', pk=self.kwargs['pk'])
 
 
 class OwnedListSurveysView(ListView):
@@ -88,7 +88,7 @@ class OwnedListSurveysView(ListView):
                 x = request.POST.get(str(item.id), 'off')
                 if x == 'on':
                     item.delete()
-        return redirect('survey:survey_list')
+        return redirect('survey_app:survey_list')
 
 
 class SurveyToPassView(ListView):

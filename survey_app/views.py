@@ -29,7 +29,7 @@ def home_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request, 'logged out')
-    return HttpResponseRedirect(reverse('survey:home'))
+    return HttpResponseRedirect(reverse('survey_app:home'))
 
 class RegisterView(CreateView):
     template_name = "register.html"
@@ -39,7 +39,7 @@ class RegisterView(CreateView):
 
     def get_success_url(self): 
         messages.success(self.request, 'registered')
-        return reverse_lazy('survey:login')
+        return reverse_lazy('survey_app:login')
 
     def form_valid(self, form):
         form.save()
@@ -59,7 +59,7 @@ class SurveyLoginView(LoginView):
         return dict(list(context.items()))
 
     def get_success_url(self):
-        return reverse_lazy('survey:survey_list')
+        return reverse_lazy('survey_app:survey_list')
 
     def form_valid(self, form):
         username = form.cleaned_data.get('username')
