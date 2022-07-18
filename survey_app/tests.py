@@ -28,15 +28,16 @@ def test_user(auto_login_user):
     assert count == 1
 
 
+@pytest.mark.django_db
 @pytest.mark.parametrize(
         'param', [
-            '/survey/create/',
-            '/survey/list/',
-            '/survey/'
+            'survey:survey_list',
+            'survey:register',
+            'survey:login'
         ]
     )
 def test_get200_request(param, client):
-   response = client.get(param, follow=True)
+   response = client.get(reverse(param), follow=True)
    assert response.status_code == 200
 
 # @pytest.mark.parametrize(
