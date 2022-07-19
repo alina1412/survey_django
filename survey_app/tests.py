@@ -1,4 +1,4 @@
-# from pathlib import WindowsPath
+from pathlib import WindowsPath
 # from django.test import SimpleTestCase, TestCase, Client
 # from django import urls
 import pytest
@@ -141,22 +141,58 @@ def test_pages_with_db(auto_login_user):
 
     delete_question_by_checkbox(survey, question)
 
-# @pytest.mark.parametrize(
-#    'param, template_name', [
-#       ('shelves:books_add', 'books_add.html'),
-#       ('shelves:table_books', 'list_draft.html'),
-#       ('shelves:book_search', 'query.html'),
-#    ]
-# )
-# def test_registered_templates(param, template_name, client, auto_login_user):
-#     client, user = auto_login_user
-#     response = client.get(reverse(param))
-#     assert response.templates
-#     lst = list([t.name for t in response.templates])
-#     print(lst)
-#     lst = [x.__str__() if isinstance(x, WindowsPath) else x for x in lst]
-#     assert [template_name in x for x in lst]
+    def test_registered_templates(client, param, template_name):
+        # question_id = Question.objects.first().id
+        survey_id = Survey.objects.first().id
 
+        response = client.get(reverse(param, kwargs={'survey_id': survey_id}), follow=True)
+        assert response.templates
+        lst = list([t.name for t in response.templates])
+        print(lst)
+        lst = [x.__str__() if isinstance(x, WindowsPath) else x for x in lst]
+        assert [template_name in x for x in lst]
+
+    test_registered_templates(client, 'survey_app:survey_detail', 'survey_detail.html')
+    test_registered_templates(client, 'survey_app:add_question', 'add_template.html')
+    test_registered_templates(client, 'survey_app:answer', 'answer.html')
+
+
+    def create_second_user(client):
+        user2 = User.objects.create(username="user2", password="qwerty12542")
+        client.force_login(user2)
+        return user2
+
+    user2 = create_second_user(client)
+
+    def test_2url_list(user2):
+        # response = client.get(reverse(param))
+        question_id = Question.objects.first().id
+        survey_id = Survey.objects.first().id
+
+        response = client.get(reverse('survey_app:answer', kwargs={'survey_id': survey.id}), follow=True)
+        assert response.status_code == 200
+
+        response = client.get(reverse('survey_app:survey_detail', kwargs={'survey_id': survey.id}), follow=True)
+        assert response.status_code == 404
+
+        response = client.get(reverse('survey_app:results', kwargs={'survey_id': survey.id}), follow=True)
+        assert response.status_code == 404
+
+        response = client.get(reverse('survey_app:add_question', kwargs={'survey_id': survey.id}), follow=True)
+        assert response.status_code == 404
+
+        context = dict(choice = "-choice1")
+        response = client.post(reverse('survey_app:add_choice', kwargs={'question_id': question_id}), context, follow=True)
+        assert response.status_code == 404
+
+        response = client.get(reverse('survey_app:question_detail', kwargs={'question_id': question_id}), follow=True)
+        assert response.status_code == 404
+
+    test_2url_list(user2)
+
+
+
+    
 
 # @pytest.mark.parametrize(
 #    'param, template_name', [
