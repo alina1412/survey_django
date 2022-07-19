@@ -1,36 +1,27 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, CreateView
 
+from .crud import *
 from .forms import AddChoiceForm
 from .models import *
 from .views_menu import menu, menu_log, get_menu
 from .view_mixin import LoginRequiredMixin
 
+
 class VotedAnswerView(TemplateView):
     """answer/<int:survey_id>/    answer"""
     template_name = 'answer.html'
     extra_context = {'h3': 'fill the survey, please', 'title': 'vote'}
-    
-    def get_survey(self, survey_id):
-        try:
-            survey_obj = Survey.objects.get(id=survey_id)
-            return survey_obj
-        except ObjectDoesNotExist:
-            raise Http404
-
-    def get_questions_of_a_survey(self, survey):
-        return Question.objects.filter(survey=survey).order_by('id')
 
     def get_question_list_and_choices(self, questions):
         q_tuples = []
         for q in questions:
-            cs = Choice.objects.filter(question=q)
+            cs = get_choices_of_question(q)
             print(cs)
             if cs:
                 q_tuples.append((q, [c.choice for c in cs]))
@@ -43,15 +34,15 @@ class VotedAnswerView(TemplateView):
         context["menu"] = get_menu(self.request)
         survey_id = self.kwargs['survey_id']
         context['survey_id'] = survey_id
-        survey_obj = self.get_survey(survey_id)
+        survey_obj = get_survey_by_id(survey_id)
         # print(survey_obj)
-        qs = self.get_questions_of_a_survey(survey_obj)
+        qs = get_questions_of_a_survey(survey_obj).order_by('id')
         # print(qs)
         context['questions'] = self.get_question_list_and_choices(qs)
         # print(context['questions'])
         return context
 
-    def save_choice(self, question, choice):
+    def save_choice(self, choice, question):
         a = Answer(answer=choice, question=question)
         a.save()
 
@@ -61,8 +52,8 @@ class VotedAnswerView(TemplateView):
             choice = request.POST.get(f"q{q.id}choice", None)
             if choice is None or choice in opts:
                 # print(choice, choice in opts)
-                question = Question.objects.get(id=q.id)
-                self.save_choice(question, choice)
+                question = get_question_by_question_id(q.id)
+                self.save_choice(choice, question)
             else:
                 raise Http404("choice incorrect")
         messages.success(self.request, 'voted')
@@ -81,32 +72,21 @@ class AddChoiceView(LoginRequiredMixin, CreateView):
         # messages.success(self.request, 'added')
         return reverse_lazy('survey_app:question_detail', kwargs={'question_id': self.kwargs['question_id']}) 
 
-    def check_ownership(self, survey_id):
-        try:
-            surv = Survey.objects.get(id=survey_id)
-        except ObjectDoesNotExist:
-            raise Http404
-        if surv.owner.id != self.request.user.id:
+    def check_ownership(self, survey):
+        if survey.owner.id != self.request.user.id:
             raise Http404
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['pk'] = self.kwargs['question_id']
         q_obj = self.get_queryset()
-        self.check_ownership(q_obj.survey.id)
+        survey = get_survey_by_id(q_obj.survey.id)
+        self.check_ownership(survey)
         return context
 
     def get_queryset(self):
-        num = self.kwargs['question_id']
-        try:
-            q_obj = Question.objects.get(id=num)
-        except ObjectDoesNotExist:
-            raise Http404
-        return q_obj
+        return get_question_by_question_id(self.kwargs['question_id'])
 
     def form_valid(self, form):
         form.instance.question = self.get_queryset()
-        # form.instance.
-        # form.instance.created_by = self.request.user
         form.save()
         return super().form_valid(form)

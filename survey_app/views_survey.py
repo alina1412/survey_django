@@ -1,19 +1,19 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-
-from .models import *
-from .forms import *
 from django.views.generic import DetailView, ListView, CreateView
 
-from .views_menu import menu, menu_log, menu_notlog, get_menu
+from .crud import *
 from .download import AttachFile
+from .forms import *
+from .models import *
+from .views_menu import menu, menu_log, menu_notlog, get_menu
 from .view_mixin import LoginRequiredMixin
+
 
 class AddSurveyView(LoginRequiredMixin, CreateView):
     """'add-survey/' name='add_survey'"""
@@ -28,7 +28,7 @@ class AddSurveyView(LoginRequiredMixin, CreateView):
         return reverse('survey_app:survey_list')
 
     def form_valid(self, form):
-        form.instance.owner = User.objects.get(id=self.request.user.id)
+        form.instance.owner = get_user_by_id(self.request.user.id)
         form.save()
         return super().form_valid(form)
 
@@ -40,37 +40,32 @@ class DetailSurveyView(LoginRequiredMixin, DetailView):
     extra_context = {'title': 'survey detail', "menu": menu + menu_log}
     pk_url_kwarg = 'survey_id'  # default: pk
 
-    def get_survey(self, survey_id):
-        try:
-            surv = Survey.objects.get(id=survey_id)
-            return surv
-        except ObjectDoesNotExist:
-            raise Http404
-
-    def check_ownership(self, surv):
-        if surv.owner.id != self.request.user.id:
+    def check_ownership(self, survey):
+        if survey.owner.id != self.request.user.id:
             raise Http404
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        surv = self.get_survey(self.kwargs['survey_id'])
-        self.check_ownership(surv)
-        questions = Question.objects.filter(survey=self.kwargs['survey_id'])
+        survey = get_survey_by_id(self.kwargs['survey_id'])
+        self.check_ownership(survey)
+        questions = get_questions_of_a_survey(survey)
         context['data'] = questions
-        context['survey'] = surv
-        context['h3'] = surv.title
+        context['survey'] = survey
+        context['h3'] = survey.title
         return context
 
     def post(self, request, *args, **kwargs):
         if 'delete' in request.POST:
             # print("delete")
-            for item in Question.objects.filter(survey=self.kwargs['survey_id']):
+            survey = get_survey_by_id(self.kwargs['survey_id'])
+            for item in get_questions_of_a_survey(survey):
                 x = request.POST.get(str(item.id), 'off')
                 if x == 'on':
                     item.delete()
 
         if 'download' in request.POST:
-            questions = Question.objects.filter(survey=self.kwargs['survey_id'])
+            survey = get_survey_by_id(self.kwargs['survey_id'])
+            questions = get_questions_of_a_survey(survey)
             return self.get_file_to_attach(questions)
 
         return redirect('survey_app:survey_detail', survey_id=self.kwargs['survey_id'])
@@ -87,14 +82,12 @@ class OwnedListSurveysView(LoginRequiredMixin, ListView):
     extra_context = {"menu": menu + menu_log}
 
     def get_queryset(self):
-        return Survey.objects.\
-                        select_related('owner').\
-                        filter(owner__id = self.request.user.id)  
+        return get_owned_surveys(self.request.user.id) 
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = self.get_queryset()
-        print(context['object_list']) 
+        # print(context['object_list']) 
         context['title'] = 'survey list'
         context['h3'] = "your survey's list"
         return context
@@ -116,8 +109,8 @@ class SurveyToPassView(ListView):
     context_object_name = 'object_list'
     extra_context = {'h3': 'survey you can pass', 'title': 'to pass'}
 
-    def get_queryset(self):
-        return Survey.objects.filter()  
+    # def get_queryset(self):
+    #     return Survey.objects.filter()  
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -131,32 +124,17 @@ class ResultsView(LoginRequiredMixin, ListView):
     template_name = "results.html"
     extra_context = {'h3': 'results of a survey', 'title': 'results'}
 
-    def check_ownership(self, survey_id):
-        try:
-            surv = Survey.objects.get(id=survey_id)
-        except ObjectDoesNotExist:
+    def check_ownership(self, survey):
+        if survey.owner.id != self.request.user.id:
             raise Http404
-        if surv.owner.id != self.request.user.id:
-            raise Http404
-            
-    def get_qset_questions_of_survey(self, survey_id):
-        return Question.objects.\
-                        select_related('survey').\
-                        filter(survey__id=survey_id) 
-
-    def get_qset_answers_for_question(self, question):
-        return Answer.objects.filter(question=question)
-
-    def get_qset_choices_for_question(self, question):
-        return Choice.objects.filter(question=question)
 
     def get_count_votes_for_choice(self, qset_answers, ch):
         return qset_answers.filter(answer=ch.choice).count()
 
     def get_item_answer_statistic(self, question):
         item = {}
-        qset_answers = self.get_qset_answers_for_question(question)
-        choices = self.get_qset_choices_for_question(question)
+        qset_answers = get_qset_answers_for_question(question)
+        choices = get_choices_of_question(question)
 
         choice_name_count = []
         for choice in choices:
@@ -172,8 +150,9 @@ class ResultsView(LoginRequiredMixin, ListView):
         item['choices'] = [(choice, its_ans_count)] """
         object_list = [] 
         survey_id = self.kwargs['survey_id']
-        self.check_ownership(survey_id)
-        q_set = self.get_qset_questions_of_survey(survey_id)
+        survey = get_survey_by_id(survey_id)
+        self.check_ownership(survey)
+        q_set = get_qset_questions_of_survey(survey_id)
         for question in q_set:
             item = self.get_item_answer_statistic(question)
             object_list.append(item)
