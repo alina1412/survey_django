@@ -1,10 +1,11 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-from django.http import Http404
-from django.contrib import messages
 
 from .models import *
 from .forms import *
@@ -39,11 +40,21 @@ class DetailSurveyView(LoginRequiredMixin, DetailView):
     extra_context = {'title': 'survey detail', "menu": menu + menu_log}
     pk_url_kwarg = 'survey_id'  # default: pk
 
+    def get_survey(self, survey_id):
+        try:
+            surv = Survey.objects.get(id=survey_id)
+            return surv
+        except ObjectDoesNotExist:
+            raise Http404
+
+    def check_ownership(self, surv):
+        if surv.owner.id != self.request.user.id:
+            raise Http404
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        surv = Survey.objects.get(id=self.kwargs['survey_id'])
-        if not surv:
-            return Http404
+        surv = self.get_survey(self.kwargs['survey_id'])
+        self.check_ownership(surv)
         questions = Question.objects.filter(survey=self.kwargs['survey_id'])
         context['data'] = questions
         context['survey'] = surv
@@ -120,6 +131,14 @@ class ResultsView(LoginRequiredMixin, ListView):
     template_name = "results.html"
     extra_context = {'h3': 'results of a survey', 'title': 'results'}
 
+    def check_ownership(self, survey_id):
+        try:
+            surv = Survey.objects.get(id=survey_id)
+        except ObjectDoesNotExist:
+            raise Http404
+        if surv.owner.id != self.request.user.id:
+            raise Http404
+            
     def get_qset_questions_of_survey(self, survey_id):
         return Question.objects.\
                         select_related('survey').\
@@ -152,7 +171,9 @@ class ResultsView(LoginRequiredMixin, ListView):
         item['title'] = question.question; 
         item['choices'] = [(choice, its_ans_count)] """
         object_list = [] 
-        q_set = self.get_qset_questions_of_survey(self.kwargs['survey_id'])
+        survey_id = self.kwargs['survey_id']
+        self.check_ownership(survey_id)
+        q_set = self.get_qset_questions_of_survey(survey_id)
         for question in q_set:
             item = self.get_item_answer_statistic(question)
             object_list.append(item)

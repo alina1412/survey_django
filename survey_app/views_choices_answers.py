@@ -1,6 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -16,19 +17,38 @@ class VotedAnswerView(TemplateView):
     template_name = 'answer.html'
     extra_context = {'h3': 'fill the survey, please', 'title': 'vote'}
     
+    def get_survey(self, survey_id):
+        try:
+            survey_obj = Survey.objects.get(id=survey_id)
+            return survey_obj
+        except ObjectDoesNotExist:
+            raise Http404
+
+    def get_questions_of_a_survey(self, survey):
+        return Question.objects.filter(survey=survey).order_by('id')
+
+    def get_question_list_and_choices(self, questions):
+        q_tuples = []
+        for q in questions:
+            cs = Choice.objects.filter(question=q)
+            print(cs)
+            if cs:
+                q_tuples.append((q, [c.choice for c in cs]))
+        # print(q_tuples)
+        return q_tuples
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["menu"] = menu
         context["menu"] = get_menu(self.request)
-
-        context['survey_id'] = self.kwargs['survey_id']
-        s = Survey.objects.get(id=self.kwargs['survey_id'])
-        qs = Question.objects.filter(survey=s).order_by('id')
-        context['questions'] = []
-        for q in qs:
-            cs = Choice.objects.filter(question=q)
-            if cs:
-                context['questions'].append((q, [c.choice for c in cs]))
+        survey_id = self.kwargs['survey_id']
+        context['survey_id'] = survey_id
+        survey_obj = self.get_survey(survey_id)
+        # print(survey_obj)
+        qs = self.get_questions_of_a_survey(survey_obj)
+        # print(qs)
+        context['questions'] = self.get_question_list_and_choices(qs)
+        # print(context['questions'])
         return context
 
     def save_choice(self, question, choice):
@@ -53,20 +73,35 @@ class AddChoiceView(LoginRequiredMixin, CreateView):
     """add-choice/<int:question_id>', name='add_choice'"""
     form_class = AddChoiceForm
     template_name = 'add_template.html'
-    extra_context = {'h3': 'add answer choice', 'title': 'answer choice', "menu": menu + menu_log}
+    extra_context = {'h3': 'add answer choice', 
+                     'title': 'answer choice',
+                     "menu": menu + menu_log}
     
     def get_success_url(self):
-        messages.success(self.request, 'added')
+        # messages.success(self.request, 'added')
         return reverse_lazy('survey_app:question_detail', kwargs={'question_id': self.kwargs['question_id']}) 
+
+    def check_ownership(self, survey_id):
+        try:
+            surv = Survey.objects.get(id=survey_id)
+        except ObjectDoesNotExist:
+            raise Http404
+        if surv.owner.id != self.request.user.id:
+            raise Http404
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['pk'] = self.kwargs['question_id']
+        # context['pk'] = self.kwargs['question_id']
+        q_obj = self.get_queryset()
+        self.check_ownership(q_obj.survey.id)
         return context
 
     def get_queryset(self):
         num = self.kwargs['question_id']
-        q_obj = Question.objects.get(id=num)
+        try:
+            q_obj = Question.objects.get(id=num)
+        except ObjectDoesNotExist:
+            raise Http404
         return q_obj
 
     def form_valid(self, form):
