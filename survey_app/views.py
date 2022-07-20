@@ -12,6 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
+from .crud import get_or_create_demo_user
 from .forms import *
 from .models import *
 from .views_menu import menu, menu_log, menu_notlog, get_menu
@@ -20,12 +21,23 @@ from .views_survey import *
 from .views_questions import *
 
 
+
+def login_user(request, user):
+    login(request, user) 
+    messages.success(request, 'logged in')
+
+
 def home_view(request):
     menu_copy = get_menu(request)
+    if not request.user.is_authenticated and request.method == 'POST':
+        user = get_or_create_demo_user()
+        login_user(request, user)
+        return redirect('survey_app:survey_list')
     return render(request, 'home.html', 
-            {'h3': 'To make and answer surveys is easy',
-                    'image': "img_path", "menu": menu_copy})
-    # return HttpResponse("Hello World")
+                  {"menu": menu_copy,
+                  'h3': 'To make and answer surveys is easy',
+                  'auth': request.user.is_authenticated,})
+
 
 def logout_view(request):
     logout(request)
@@ -36,7 +48,9 @@ class RegisterView(CreateView):
     template_name = "register.html"
     form_class = UserCreationForm
     model = User
-    extra_context = {'title': 'register', 'h3': 'Register for creating surveys', "menu": menu_notlog + menu}
+    extra_context = {'title': 'register', 
+                     'h3': 'Register for creating surveys',
+                     "menu": menu_notlog + menu}
 
     def get_success_url(self): 
         messages.success(self.request, 'registered')
@@ -66,8 +80,7 @@ class SurveyLoginView(LoginView):
         username = form.cleaned_data.get('username')
         raw_password = form.cleaned_data.get('password')
         user = authenticate(username=username, password=raw_password)
-        login(self.request, user) 
-        messages.success(self.request, 'logged in')
+        login_user(self.request, user) 
         return HttpResponseRedirect(self.get_success_url())
         
     def form_invalid(self, form):
