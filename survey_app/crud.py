@@ -60,4 +60,32 @@ def get_or_create_demo_user():
     if not user:
         user = User.objects.create_user(username=demo_username, password=demo_password)
         user.save()
+    
+    create_demo_user_survey(user)
     return user
+
+
+def create_demo_user_survey(user):
+    surv_qset = get_owned_surveys(user.id)
+    if surv_qset:
+        return
+    survey = Survey(title='Example survey', owner=user)
+    survey.save()
+    print(survey)
+    questions = [("What programming language do you learn?", ('python', 'Java', 'C++', 'other')),
+                ("How many hours per a day do you learn?", ('about one', 'one-two', 'more than two')),
+                ("Did you use courses platforms?", ('yes', 'no')),]
+    for q, opts in questions:
+        q = Question(question=q, survey=survey)
+        q.save()
+
+        for choice in opts:
+            Choice(question_id=q.id, choice=choice).save()
+
+
+def delete_demo_user(request):
+    if request.user.username == 'demo_djando_user_for_suveys':
+        try:
+            User.objects.filter(id=request.user.id).delete()
+        except Exception as e:
+            print(e)

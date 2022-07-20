@@ -12,7 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
-from .crud import get_or_create_demo_user
+from .crud import get_or_create_demo_user, delete_demo_user
 from .forms import *
 from .models import *
 from .views_menu import menu, menu_log, menu_notlog, get_menu
@@ -40,6 +40,7 @@ def home_view(request):
 
 
 def logout_view(request):
+    delete_demo_user(request)
     logout(request)
     messages.success(request, 'logged out')
     return HttpResponseRedirect(reverse('survey_app:home'))
