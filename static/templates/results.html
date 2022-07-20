@@ -18,7 +18,7 @@
         {% else %}
         <table class="table">
             <tr>
-            <th>question</th>
+            <th>questions</th>
             <th>answers</th>
             </tr>
 
@@ -26,7 +26,7 @@
                 <tr>
                     <td> {{ item.title }} </td>
                     <td> {% for choice in item.choices %}
-                        <li> {{ choice.0 }} - {{ choice.1 }} </li>
+                        <li> {{ choice.0 }} - <b>{{ choice.1 }} </b></li>
                         {% endfor %}
                     </td>
                 </tr>

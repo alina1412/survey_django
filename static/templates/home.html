@@ -9,15 +9,27 @@
 
 {% block body %}
 <div class="container">
-        
-        <p>Answer someone's survey or Login to create your own surveys!</p>
+        <blockquote class="blockquote text-center mt-1 mb-5">
+                <p class="mb-0">Answer someone's survey or Login to create your own surveys!</p>
+                <footer class="blockquote-footer">
+                        <button><a href="#" class="nav-link text-dark">demo user login</a></button>
+                </footer>
+        </blockquote>
 
-        Example of pages for registered users:
-        <img src="{% static 'images/example.jpg' %}" class="img-fluid border border-secondary">
-        
-        
+        <div class="mt-lg-2 mb-lg-2">
+        <p></p>
 
-        
-        
+        <p><h6 style="color: rgb(31, 30, 30);"> Example of pages for registered users: </h6></p>
+        <p>
+        <img src="{% static 'images/your-list-example.jpg' %}" class="img-fluid img-thumbnail w-75">
+        </p>
+        <p>
+        <img src="{% static 'images/survey-detail-example.jpg' %}" class="img-fluid img-thumbnail w-75">
+        </p>
+        </div>
+        <p>
+        <img src="{% static 'images/results-example.jpg' %}" class="img-fluid img-thumbnail w-75">
+        </p>
+
 </div>
 {% endblock %}

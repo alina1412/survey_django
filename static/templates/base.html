@@ -22,16 +22,22 @@
                 <ul class="navbar-nav">
                     {% for m in menu %}
                     <li class="nav-item">
-                    <a class="nav-link" href="{% url m.url_name %}">{{m.descr}}</a>
-                    </li>
-                    {% endfor %}
-
-                    {% for m in menu_param %}
-                    <li class="nav-item">
-                    <a class="nav-link" href="{{ m.url_name }}">{{m.descr}}</a>
+                    <a class="nav-link" href="{% url m.url_name %}" onclick="{{m.onclick}}">{{m.descr}}</a>
                     </li>
                     {% endfor %}
                 </ul>
+         
+                <script>
+                    function myFunction() {
+                        if (confirm("Log out?")) {
+                            return true;
+                         } else {
+                        // print("You pressed Cancel!");
+                        return false;
+                        }
+                    }
+                </script>
+
             </div>
         </nav>
 

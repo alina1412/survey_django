@@ -107,7 +107,7 @@ class SurveyToPassView(ListView):
     template_name = "surveys_to_pass_list.html"
     model = Survey
     context_object_name = 'object_list'
-    extra_context = {'h3': 'survey you can pass', 'title': 'to pass'}
+    extra_context = {'h3': 'surveys you can pass', 'title': 'to pass'}
 
     # def get_queryset(self):
     #     return Survey.objects.filter()  

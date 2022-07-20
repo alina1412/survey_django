@@ -18,21 +18,27 @@ menu = [
 
 menu_log = [
     {  "url_name": 'survey_app:survey_list',
-        "descr": 'created surveys'
+        "descr": "your survey's list"
     },
-    {  "url_name": 'survey_app:add_survey',
-        "descr": 'add survey'
-    },    
+    # {  "url_name": 'survey_app:add_survey',
+    #     "descr": 'add survey'
+    # },    
     {  "url_name": 'survey_app:logout',
-        "descr": 'logout'
+        "descr": 'logout',
+        "onclick": "return myFunction();"
     },
 
     ]
+
+
 
 def get_menu(request):
     if request.user.is_authenticated:
         return menu + menu_log
     return menu_notlog + menu
+
+
+
 
 # menu_param = [
 #     {  "url_name": '/survey_app/add_question/1',
