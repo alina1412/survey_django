@@ -1,6 +1,3 @@
-import logging
-logger = logging.getLogger(__name__)
-
 from django.contrib import messages
 from django.http import Http404
 from django.urls import reverse_lazy
@@ -12,16 +9,21 @@ from .models import *
 from .views_menu import menu, menu_log
 from .view_mixin import LoginRequiredMixin
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class AddQuestionView(LoginRequiredMixin, CreateView):
     """add-question/<int:survey_id>/', name='add_question'"""
     form_class = AddQuestionForm
     template_name = 'add_template.html'
-    extra_context = {'h3': 'add a question', 'title': 'add question', "menu": menu + menu_log}
+    extra_context = {'h3': 'add a question',
+                     'title': 'add question', "menu": menu + menu_log}
 
     def get_success_url(self):
         # messages.success(self.request, 'added')
-        return reverse_lazy('survey_app:question_detail', kwargs={'question_id': self.object.pk})
+        return reverse_lazy('survey_app:question_detail', 
+                            kwargs={'question_id': self.object.pk})
 
     def check_ownership(self, survey):
         if survey.owner.id != self.request.user.id:
@@ -38,7 +40,7 @@ class AddQuestionView(LoginRequiredMixin, CreateView):
         form.instance.survey = self.get_context_data()['survey']
         form.save()
         return super().form_valid(form)
-    
+
 
 class DetailQuestionView(LoginRequiredMixin, DetailView):
     "'question-detail/<int:question_id>/', name='question_detail'"
@@ -52,7 +54,7 @@ class DetailQuestionView(LoginRequiredMixin, DetailView):
         q = get_question_by_question_id(self.kwargs['question_id'])
         if not q or (q.survey.owner.id != self.request.user.id):
             raise Http404
-        data = get_choices_of_question(q)  
+        data = get_choices_of_question(q)
         # print(q)
         context['h3'] = "Question: " + q.question
         context['question_id'] = q.id

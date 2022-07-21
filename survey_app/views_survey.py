@@ -1,6 +1,3 @@
-import logging
-logger = logging.getLogger(__name__)
-
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import render, redirect
@@ -14,16 +11,20 @@ from .models import *
 from .views_menu import menu, menu_log, menu_notlog, get_menu
 from .view_mixin import LoginRequiredMixin
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class AddSurveyView(LoginRequiredMixin, CreateView):
     """'add-survey/' name='add_survey'"""
     template_name = "add_template.html"
     form_class = CreateSurvey
     # print( menu + menu_log)
-    extra_context = {'title': 'add survey', 'h3': 'add a survey', "menu": menu + menu_log}
+    extra_context = {'title': 'add survey',
+                     'h3': 'add a survey', "menu": menu + menu_log}
     # context_object_name = 'object_list'
 
-    def get_success_url(self): 
+    def get_success_url(self):
         messages.success(self.request, 'added')
         return reverse('survey_app:survey_list')
 
@@ -68,11 +69,13 @@ class DetailSurveyView(LoginRequiredMixin, DetailView):
             questions = get_questions_of_a_survey(survey)
             return self.get_file_to_attach(questions)
 
-        return redirect('survey_app:survey_detail', survey_id=self.kwargs['survey_id'])
-    
+        return redirect('survey_app:survey_detail',
+                        survey_id=self.kwargs['survey_id'])
+
     def get_file_to_attach(self, item_list):
         AF = AttachFile(item_list)
         return AF.attach_file()
+
 
 class OwnedListSurveysView(LoginRequiredMixin, ListView):
     """'surveys/', name='survey_list'"""
@@ -82,12 +85,12 @@ class OwnedListSurveysView(LoginRequiredMixin, ListView):
     extra_context = {"menu": menu + menu_log}
 
     def get_queryset(self):
-        return get_owned_surveys(self.request.user.id) 
-    
+        return get_owned_surveys(self.request.user.id)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = self.get_queryset()
-        # print(context['object_list']) 
+        # print(context['object_list'])
         context['title'] = 'survey list'
         context['h3'] = "your survey's list"
         return context
@@ -110,8 +113,8 @@ class SurveyToPassView(ListView):
     extra_context = {'h3': 'surveys you can pass', 'title': 'to pass'}
 
     # def get_queryset(self):
-    #     return Survey.objects.filter()  
-        
+    #     return Survey.objects.filter()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = self.get_queryset()
@@ -148,7 +151,7 @@ class ResultsView(LoginRequiredMixin, ListView):
         """object_list of items:
         item['title'] = question.question; 
         item['choices'] = [(choice, its_ans_count)] """
-        object_list = [] 
+        object_list = []
         survey_id = self.kwargs['survey_id']
         survey = get_survey_by_id(survey_id)
         self.check_ownership(survey)

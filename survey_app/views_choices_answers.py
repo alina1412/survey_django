@@ -1,6 +1,3 @@
-import logging
-logger = logging.getLogger(__name__)
-
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -11,6 +8,9 @@ from .forms import AddChoiceForm
 from .models import *
 from .views_menu import menu, menu_log, get_menu
 from .view_mixin import LoginRequiredMixin
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 class VotedAnswerView(TemplateView):
@@ -59,18 +59,18 @@ class VotedAnswerView(TemplateView):
         messages.success(self.request, 'voted')
         return HttpResponseRedirect(reverse('survey_app:home'))
 
-  
+
 class AddChoiceView(LoginRequiredMixin, CreateView):
     """add-choice/<int:question_id>', name='add_choice'"""
     form_class = AddChoiceForm
     template_name = 'add_template.html'
-    extra_context = {'h3': 'add answer choice', 
+    extra_context = {'h3': 'add answer choice',
                      'title': 'answer choice',
                      "menu": menu + menu_log}
-    
+
     def get_success_url(self):
         # messages.success(self.request, 'added')
-        return reverse_lazy('survey_app:question_detail', kwargs={'question_id': self.kwargs['question_id']}) 
+        return reverse_lazy('survey_app:question_detail', kwargs={'question_id': self.kwargs['question_id']})
 
     def check_ownership(self, survey):
         if survey.owner.id != self.request.user.id:

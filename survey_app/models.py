@@ -10,6 +10,7 @@ class Survey(models.Model):
         User,
         on_delete=models.CASCADE,
     )
+
     def __str__(self):
         return f'{self.id} {self.title}'
 
@@ -18,6 +19,7 @@ class Survey(models.Model):
     class Meta:
         db_table = "surveys"
 
+
 class Question(models.Model):
     id = models.AutoField(primary_key=True)
     question = models.TextField(blank=False)
@@ -25,13 +27,15 @@ class Question(models.Model):
         Survey,
         on_delete=models.CASCADE,
     )
+
     def __str__(self):
         return f'{self.id} {self.question[:14]}'
-    
+
     # def get_absolute_url(self):
     #     return reverse('question_detail', kwargs={'question_id': self.question_id})
     class Meta:
         db_table = "questions"
+
 
 class Choice(models.Model):
     id = models.AutoField(primary_key=True)
@@ -40,10 +44,13 @@ class Choice(models.Model):
         Question,
         on_delete=models.CASCADE,
     )
+
     def __str__(self):
         return self.choice[:14]
+
     class Meta:
         db_table = "choices"
+
 
 class Answer(models.Model):
     id = models.AutoField(primary_key=True)
@@ -52,8 +59,10 @@ class Answer(models.Model):
         Question,
         on_delete=models.CASCADE,
     )
+
     def __str__(self):
         return self.answer[:14] if self.answer else ""
+
     class Meta:
         db_table = "answers"
 

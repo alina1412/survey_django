@@ -32,13 +32,13 @@ def get_questions_of_a_survey(survey_obj):
 
 def get_qset_questions_of_survey(survey_id):
     return Question.objects.\
-                    select_related('survey').\
-                    filter(survey__id=survey_id) 
+        select_related('survey').\
+        filter(survey__id=survey_id)
 
 
 def get_owned_surveys(user_id):
     return Survey.objects.select_related('owner').\
-                          filter(owner__id = user_id)  
+        filter(owner__id=user_id)
 
 
 def get_choices_of_question(question):
@@ -58,9 +58,10 @@ def get_or_create_demo_user():
     demo_password = 'demo_user_password'
     user = get_user_by_name(demo_username)
     if not user:
-        user = User.objects.create_user(username=demo_username, password=demo_password)
+        user = User.objects.create_user(
+            username=demo_username, password=demo_password)
         user.save()
-    
+
     create_demo_user_survey(user)
     return user
 
@@ -72,9 +73,11 @@ def create_demo_user_survey(user):
     survey = Survey(title='Example survey', owner=user)
     survey.save()
     print(survey)
-    questions = [("What programming language do you learn?", ('python', 'Java', 'C++', 'other')),
-                ("How many hours per a day do you learn?", ('about one', 'one-two', 'more than two')),
-                ("Did you use courses platforms?", ('yes', 'no')),]
+    questions = [("What programming language do you learn?",
+                  ('python', 'Java', 'C++', 'other')),
+                 ("How many hours per a day do you learn?",
+                  ('about one', 'one-two', 'more than two')),
+                 ("Did you use courses platforms?", ('yes', 'no')), ]
     for q, opts in questions:
         q = Question(question=q, survey=survey)
         q.save()

@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import os
 from pathlib import Path
 from urllib.parse import urlparse
@@ -11,7 +12,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-from dotenv import load_dotenv
 load_dotenv()
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -53,9 +53,9 @@ ROOT_URLCONF = 'survey_project.urls'
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
-STATICFILES_DIRS = [('templates', f'{BASE_DIR}/static/templates/'), 
-                    ('css', f'{BASE_DIR}/static/css/'), 
-                    ('images', f'{BASE_DIR}/static/images/')] 
+STATICFILES_DIRS = [('templates', f'{BASE_DIR}/static/templates/'),
+                    ('css', f'{BASE_DIR}/static/css/'),
+                    ('images', f'{BASE_DIR}/static/images/')]
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # MEDIA_URL = '/media/'
@@ -63,7 +63,7 @@ STATICFILES_DIRS = [('templates', f'{BASE_DIR}/static/templates/'),
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'static/', 
+        'DIRS': [BASE_DIR / 'static/',
                             'static/templates/',
                             'static/css/',
                             'static/images/',
@@ -71,7 +71,7 @@ TEMPLATES = [
                             # 'survey_app/',
                             'survey_app/templates/survey_app/',
                             'static/survey_app/images/'
-                            ], #  
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -97,9 +97,9 @@ def parse_db_url():
     credentals, address = db_url_parsed.netloc.split("@")
     uname, passwd = credentals.split(":")
     host, port = address.split(":")
-    d = {"NAME": database, 
-         "USER": uname, "PASSWORD": passwd, 
-         "HOST": host, "PORT": port, 
+    d = {"NAME": database,
+         "USER": uname, "PASSWORD": passwd,
+         "HOST": host, "PORT": port,
          "ENGINE": 'django.db.backends.postgresql_psycopg2',
          'OPTIONS': {'sslmode': 'disable'},
          }
