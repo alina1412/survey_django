@@ -100,16 +100,19 @@ def parse_db_url():
     d = {"NAME": database, 
          "USER": uname, "PASSWORD": passwd, 
          "HOST": host, "PORT": port, 
-         "ENGINE": 'django.db.backends.postgresql_psycopg2'}
+         "ENGINE": 'django.db.backends.postgresql_psycopg2',
+         'OPTIONS': {'sslmode': 'disable'},
+         }
     return d
 
 
 if DEBUG:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+        'default': parse_db_url()
+        # {
+        #     'ENGINE': 'django.db.backends.sqlite3',
+        #     'NAME': BASE_DIR / 'db.sqlite3',
+        # }
     }
 else:
     DATABASES = {
