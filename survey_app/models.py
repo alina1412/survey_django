@@ -15,7 +15,8 @@ class Survey(models.Model):
 
     # def get_absolute_url(self):
     #     return reverse('question_detail', kwargs={'pk': self.pk})
-
+    class Meta:
+        db_table = "surveys"
 
 class Question(models.Model):
     id = models.AutoField(primary_key=True)
@@ -29,7 +30,8 @@ class Question(models.Model):
     
     # def get_absolute_url(self):
     #     return reverse('question_detail', kwargs={'question_id': self.question_id})
-
+    class Meta:
+        db_table = "questions"
 
 class Choice(models.Model):
     id = models.AutoField(primary_key=True)
@@ -40,7 +42,8 @@ class Choice(models.Model):
     )
     def __str__(self):
         return self.choice[:14]
-
+    class Meta:
+        db_table = "choices"
 
 class Answer(models.Model):
     id = models.AutoField(primary_key=True)
@@ -51,7 +54,8 @@ class Answer(models.Model):
     )
     def __str__(self):
         return self.answer[:14] if self.answer else ""
-
+    class Meta:
+        db_table = "answers"
 
 # class Product(models.Model):
 #     title = models.CharField(max_length=120)
