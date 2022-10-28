@@ -1,13 +1,12 @@
-
 from django import forms
-from .models import  Question, Survey, Choice
 
+from .models import Choice, Question, Survey
 
 
 class CreateSurvey(forms.ModelForm):
     class Meta:
         model = Survey
-        fields = ['title']
+        fields = ["title"]
 
 
 class AddQuestionForm(forms.ModelForm):
@@ -15,18 +14,10 @@ class AddQuestionForm(forms.ModelForm):
 
     class Meta:
         model = Question
-        fields = ['question']
+        fields = ["question"]
 
 
 class AddChoiceForm(forms.ModelForm):
     class Meta:
         model = Choice
-        fields = ['choice']
-
-
-
-
-
-
-
-
+        fields = ["choice"]

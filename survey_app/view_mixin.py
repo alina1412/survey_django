@@ -1,9 +1,9 @@
-from django.contrib.auth.mixins import AccessMixin
 from django.contrib import messages
+from django.contrib.auth.mixins import AccessMixin
 
 
 class LoginRequiredMixin(AccessMixin):
-    login_url = 'survey_app:login'
+    login_url = "survey_app:login"
     permission_denied_message = "Not logged"
 
     def dispatch(self, request, *args, **kwargs):

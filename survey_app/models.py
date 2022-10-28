@@ -1,6 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User
-from django.urls import reverse
+from django.db import models
 
 
 class Survey(models.Model):
@@ -12,7 +11,7 @@ class Survey(models.Model):
     )
 
     def __str__(self):
-        return f'{self.id} {self.title}'
+        return f"{self.id} {self.title}"
 
     # def get_absolute_url(self):
     #     return reverse('question_detail', kwargs={'pk': self.pk})
@@ -29,7 +28,7 @@ class Question(models.Model):
     )
 
     def __str__(self):
-        return f'{self.id} {self.question[:14]}'
+        return f"{self.id} {self.question[:14]}"
 
     # def get_absolute_url(self):
     #     return reverse('question_detail', kwargs={'question_id': self.question_id})
@@ -65,20 +64,3 @@ class Answer(models.Model):
 
     class Meta:
         db_table = "answers"
-
-# class Product(models.Model):
-#     title = models.CharField(max_length=120)
-#     description = models.TextField(blank=False, null=True)
-#     # blank = False - means it can't be left unfilled
-#     # null - True - it can be empty in db
-#     price = models.DecimalField(decimal_places=2, max_digits=1000)
-#     summary = models.TextField(default='ok')
-
-
-# class VotesModel(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     choice = models.CharField(max_length=200, null=True, blank=True)
-#     question = models.ForeignKey(
-#         Question,
-#         on_delete=models.CASCADE,
-#     )

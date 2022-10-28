@@ -1,39 +1,22 @@
 menu_notlog = [
-    {
-        "url_name": 'survey_app:home',
-        "descr": 'home'
-    },
-    {
-        "url_name": 'survey_app:login',
-        "descr": 'login'
-    },
-    {
-        "url_name": 'survey_app:register',
-        "descr": 'register'
-    },
-
+    {"url_name": "survey_app:home", "descr": "home"},
+    {"url_name": "survey_app:login", "descr": "login"},
+    {"url_name": "survey_app:register", "descr": "register"},
 ]
 menu = [
-    {
-        "url_name": 'survey_app:surveys_to_pass',
-        "descr": 'surveys to pass'
-    },
+    {"url_name": "survey_app:surveys_to_pass", "descr": "surveys to pass"},
 ]
 
 menu_log = [
-    {
-        "url_name": 'survey_app:survey_list',
-        "descr": "your survey's list"
-    },
+    {"url_name": "survey_app:survey_list", "descr": "your survey's list"},
     # {  "url_name": 'survey_app:add_survey',
     #     "descr": 'add survey'
     # },
     {
-        "url_name": 'survey_app:logout',
-        "descr": 'logout',
-        "onclick": "return myFunction();"
+        "url_name": "survey_app:logout",
+        "descr": "logout",
+        "onclick": "return myFunction();",
     },
-
 ]
 
 
