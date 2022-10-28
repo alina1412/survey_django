@@ -1,5 +1,10 @@
 run:
-	python manage.py runserver
+	poetry run python manage.py runserver
 
 migrate:
-	python manage.py makemigrations && python manage.py migrate
+	poetry run python manage.py makemigrations && python manage.py migrate
+
+lint:
+	poetry run isort survey_app
+	poetry run black --exclude="survey_app/migrations/*" survey_app
+	poetry run pylint --ignore-paths="survey_app/migrations/*" survey_app
