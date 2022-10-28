@@ -108,11 +108,12 @@ def parse_db_url():
 
 if DEBUG:
     DATABASES = {
-        'default': parse_db_url()
-        # {
-        #     'ENGINE': 'django.db.backends.sqlite3',
-        #     'NAME': BASE_DIR / 'db.sqlite3',
-        # }
+        'default': 
+        # parse_db_url()
+        {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
 else:
     DATABASES = {
