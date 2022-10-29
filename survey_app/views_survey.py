@@ -15,10 +15,9 @@ from survey_app.crud import (
     get_survey_by_id,
     get_user_by_id,
 )
+from survey_app.download import AttachFile
 from survey_app.forms import CreateSurvey
 from survey_app.models import Survey
-
-from survey_app.download import AttachFile
 from survey_app.view_mixin import LoginRequiredMixin
 from survey_app.views_menu import get_menu, menu, menu_log, menu_notlog
 

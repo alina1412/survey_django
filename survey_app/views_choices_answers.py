@@ -11,8 +11,8 @@ from survey_app.crud import (
     get_questions_of_a_survey,
     get_survey_by_id,
 )
-from survey_app.models import Answer
 from survey_app.forms import AddChoiceForm
+from survey_app.models import Answer
 from survey_app.view_mixin import LoginRequiredMixin
 from survey_app.views_menu import get_menu, menu, menu_log
 
