@@ -2,7 +2,7 @@ run:
 	poetry run python manage.py runserver
 
 migrate:
-	poetry run python manage.py makemigrations && python manage.py migrate
+	poetry run python manage.py makemigrations && timeout 2 && python manage.py migrate
 
 lint:
 	poetry run isort survey_app

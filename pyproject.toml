@@ -58,6 +58,7 @@ webdriver-manager = "3.7.1"
 whitenoise = "6.1.0"
 wsproto = "1.1.0"
 pathspec = "^0.10.1"
+SQLAlchemy-Utils = "^0.38.3"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -89,9 +89,14 @@ WSGI_APPLICATION = 'survey_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+from sqlalchemy_utils import create_database, database_exists
+
 
 def parse_db_url():
     db_url = os.environ.get("DATABASE_URL")
+    if not database_exists(db_url):
+        create_database(db_url)
+
     db_url_parsed = urlparse(db_url)
     database = db_url_parsed.path[1:]
     credentals, address = db_url_parsed.netloc.split("@")
@@ -109,11 +114,11 @@ def parse_db_url():
 if DEBUG:
     DATABASES = {
         'default': 
-        # parse_db_url()
-        {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+        parse_db_url()
+        # {
+        #     'ENGINE': 'django.db.backends.sqlite3',
+        #     'NAME': BASE_DIR / 'db.sqlite3',
+        # }
     }
 else:
     DATABASES = {

@@ -3,7 +3,6 @@ debug.log
 **/__pycache__/
 .mypy_cache
 **/bdj_env/
-**/venv_sur/
 .env
 db.sqlite3
 **/download/
@@ -12,3 +11,4 @@ private_conf.py
 htmlcov
 geckodriver.log
 .pytest_cache
+.database_data/*
