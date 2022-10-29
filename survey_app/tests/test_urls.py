@@ -30,9 +30,9 @@ def test_get200_request(param, client):
         "survey_app:survey_list",
     ],
 )
-def test_url_list(param, auto_login_user):
+def test_url_list(param, auto_login_user, client):
     """access with auto_login_user"""
-    client, user = auto_login_user
+    user = auto_login_user
     response = client.get(reverse(param))
     assert response.status_code == 200
 

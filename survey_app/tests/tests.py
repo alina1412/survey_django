@@ -14,7 +14,7 @@ from survey_app.tests.utils import (
     make_survey,
     resp200_question_detail,
     resp200_survey_detail,
-    test_registered_templates,
+    check_registered_templates,
 )
 
 logger = logging.getLogger(__name__)
@@ -65,13 +65,13 @@ def test_pages_with_db(auto_login_user, client, db):
     assert response.status_code == 200
     assert Question.objects.all().count() == 1
 
-    response, temps = test_registered_templates(client, "survey_app:survey_detail")
+    response, temps = check_registered_templates(client, "survey_app:survey_detail")
     assert "survey_detail.html" in temps
 
-    response, temps = test_registered_templates(client, "survey_app:add_question")
+    response, temps = check_registered_templates(client, "survey_app:add_question")
     assert "add_template.html" in temps
 
-    response, temps = test_registered_templates(client, "survey_app:answer")
+    response, temps = check_registered_templates(client, "survey_app:answer")
     # <QuerySet []>
     assert "answer.html" in temps
 
