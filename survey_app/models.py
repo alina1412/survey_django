@@ -13,8 +13,6 @@ class Survey(models.Model):
     def __str__(self):
         return f"{self.id} {self.title}"
 
-    # def get_absolute_url(self):
-    #     return reverse('question_detail', kwargs={'pk': self.pk})
     class Meta:
         db_table = "surveys"
 
@@ -30,8 +28,6 @@ class Question(models.Model):
     def __str__(self):
         return f"{self.id} {self.question[:14]}"
 
-    # def get_absolute_url(self):
-    #     return reverse('question_detail', kwargs={'question_id': self.question_id})
     class Meta:
         db_table = "questions"
 

@@ -30,14 +30,13 @@ class AttachFile:
     def response_file_obj(self):
         with open(self.fl_path, "rb") as file:
             content_type = "text/plain"
-            # content_type, _ = mimetypes.guess_type(fl_path)
-            # print(content_type)
             response = HttpResponse(file, content_type=content_type)
             response["Content-Disposition"] = f"attachment; filename={self.name}"
             return response
 
     def delete_file(self):
         ...
+        raise NotImplemented
 
     # fl_path = f'{BASE_DIR}/static/img/{filename}'
     # print(fl_path)

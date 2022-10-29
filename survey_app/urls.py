@@ -1,6 +1,7 @@
 from django.urls import path
 
-from . import views, views_choices_answers, views_questions, views_survey
+from survey_app.views import views, views_choices_answers, views_questions, views_survey
+
 
 app_name = "survey_app"
 urlpatterns = [
@@ -22,7 +23,7 @@ urlpatterns = [
         views_questions.DetailQuestionView.as_view(),
         name="question_detail",
     ),
-    # path('question-list/', views.ListQuestionsView.as_view(), name='question_list'),
+    
     path("register/", views.RegisterView.as_view(), name="register"),
     path("login/", views.SurveyLoginView.as_view(), name="login"),
     path("logout/", views.logout_view, name="logout"),

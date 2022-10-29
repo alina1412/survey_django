@@ -11,7 +11,7 @@ from django.views.generic import CreateView
 
 from survey_app.crud import delete_demo_user, get_or_create_demo_user
 from survey_app.models import User
-from survey_app.views_menu import get_menu, menu, menu_notlog
+from survey_app.views.utils import get_menu, menu, menu_notlog
 
 logger = logging.getLogger(__name__)
 
@@ -61,9 +61,6 @@ class RegisterView(CreateView):
 
     def form_valid(self, form):
         form.save()
-        # username = form.cleaned_data.get('username')
-        # raw_password = form.cleaned_data.get('password1')
-        # print(username, raw_password)
         return super().form_valid(form)
 
 

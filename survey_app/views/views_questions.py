@@ -13,7 +13,7 @@ from survey_app.forms import AddQuestionForm
 from survey_app.models import Question
 
 from .view_mixin import LoginRequiredMixin
-from .views_menu import menu, menu_log
+from .utils import menu, menu_log
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +65,6 @@ class DetailQuestionView(LoginRequiredMixin, DetailView):
         if not q or (q.survey.owner.id != self.request.user.id):
             raise Http404
         data = get_choices_of_question(q)
-        # print(q)
         context["h3"] = "Question: " + q.question
         context["question_id"] = q.id
         context["data"] = data

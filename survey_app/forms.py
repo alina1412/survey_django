@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Choice, Question, Survey
+from survey_app.models import Choice, Question, Survey
 
 
 class CreateSurvey(forms.ModelForm):

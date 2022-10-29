@@ -18,8 +18,8 @@ from survey_app.crud import (
 from survey_app.download import AttachFile
 from survey_app.forms import CreateSurvey
 from survey_app.models import Survey
-from survey_app.view_mixin import LoginRequiredMixin
-from survey_app.views_menu import get_menu, menu, menu_log, menu_notlog
+from survey_app.views.view_mixin import LoginRequiredMixin
+from survey_app.views.utils import get_menu, menu, menu_log, menu_notlog
 
 logger = logging.getLogger(__name__)
 
@@ -29,13 +29,11 @@ class AddSurveyView(LoginRequiredMixin, CreateView):
 
     template_name = "add_template.html"
     form_class = CreateSurvey
-    # print( menu + menu_log)
     extra_context = {
         "title": "add survey",
         "h3": "add a survey",
         "menu": menu + menu_log,
     }
-    # context_object_name = 'object_list'
 
     def get_success_url(self):
         messages.success(self.request, "added")
@@ -71,7 +69,6 @@ class DetailSurveyView(LoginRequiredMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         if "delete" in request.POST:
-            # print("delete")
             survey = get_survey_by_id(self.kwargs["survey_id"])
             for item in get_questions_of_a_survey(survey):
                 x = request.POST.get(str(item.id), "off")
@@ -104,14 +101,12 @@ class OwnedListSurveysView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["object_list"] = self.get_queryset()
-        # print(context['object_list'])
         context["title"] = "survey list"
         context["h3"] = "your survey's list"
         return context
 
     def post(self, request):
         if "delete" in request.POST:
-            # print("delete")
             for item in self.get_queryset():
                 x = request.POST.get(str(item.id), "off")
                 if x == "on":
@@ -127,8 +122,6 @@ class SurveyToPassView(ListView):
     context_object_name = "object_list"
     extra_context = {"h3": "surveys you can pass", "title": "to pass"}
 
-    # def get_queryset(self):
-    #     return Survey.objects.filter()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

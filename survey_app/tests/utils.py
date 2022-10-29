@@ -70,7 +70,7 @@ def delete_question_by_checkbox(survey, question, client):
     return response
 
 
-def test_registered_templates(client, url_to_reverse):
+def check_registered_templates(client, url_to_reverse):
     survey_id = Survey.objects.first().id
     response = client.get(
         reverse(url_to_reverse, kwargs={"survey_id": survey_id}),

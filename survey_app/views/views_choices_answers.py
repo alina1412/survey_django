@@ -13,8 +13,8 @@ from survey_app.crud import (
 )
 from survey_app.forms import AddChoiceForm
 from survey_app.models import Answer
-from survey_app.view_mixin import LoginRequiredMixin
-from survey_app.views_menu import get_menu, menu, menu_log
+from survey_app.views.view_mixin import LoginRequiredMixin
+from survey_app.views.utils import get_menu, menu, menu_log
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,6 @@ class VotedAnswerView(TemplateView):
             print(cs)
             if cs:
                 q_tuples.append((q, [c.choice for c in cs]))
-        # print(q_tuples)
         return q_tuples
 
     def get_context_data(self, **kwargs):
@@ -42,11 +41,8 @@ class VotedAnswerView(TemplateView):
         survey_id = self.kwargs["survey_id"]
         context["survey_id"] = survey_id
         survey_obj = get_survey_by_id(survey_id)
-        # print(survey_obj)
         qs = get_questions_of_a_survey(survey_obj).order_by("id")
-        # print(qs)
         context["questions"] = self.get_question_list_and_choices(qs)
-        # print(context['questions'])
         return context
 
     def save_choice(self, choice, question):
@@ -58,7 +54,6 @@ class VotedAnswerView(TemplateView):
         for q, opts in context["questions"]:
             choice = request.POST.get(f"q{q.id}choice", None)
             if choice is None or choice in opts:
-                # print(choice, choice in opts)
                 question = get_question_by_question_id(q.id)
                 self.save_choice(choice, question)
             else:
