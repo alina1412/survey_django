@@ -1,4 +1,7 @@
+<body>
+        
 # Survey app (django)
+        
 
 ## Description
 It's a django web-application. The site allows user to create surveys and answer surverys of other users.
@@ -10,16 +13,29 @@ The app can use `sqlite` or `postgres` database, it keeps data in tables: Survey
 For keeping Users it takes a model from django.contrib.auth.models.
 
 ### Models
-![models](https://user-images.githubusercontent.com/8655093/198866948-5690511c-6c0f-45b6-9c37-95e0424db625.jpg)
+<img src="https://user-images.githubusercontent.com/8655093/198866948-5690511c-6c0f-45b6-9c37-95e0424db625.jpg" height="250"> </img>
 
 ### Tables
 picture of some tables (except of a default django tables, auth_user - is a default one)
-![tables](https://user-images.githubusercontent.com/8655093/198867044-4c7ba45b-c66e-4f7e-8599-2a96ad472dbd.jpg)
+<img src="https://user-images.githubusercontent.com/8655093/198867044-4c7ba45b-c66e-4f7e-8599-2a96ad472dbd.jpg" height="310"> </img>
 
 
-### Structure
+
+<details close="">
+<summary>  
+        
+### Structure tree
 ```
 survey_django/
+|
+|
+```
+        
+
+</summary> 
+        
+```
+        
 |   .env
 |   .env-example
 |   .gitignore
@@ -97,9 +113,22 @@ survey_django/
         urls.py
         wsgi.py
         __init__.py
+        
  ```
+        
+</details>
+
 
 ## Example of pages
-![survey-detail-example](https://user-images.githubusercontent.com/8655093/179979528-a8929f24-56fc-4b48-a759-0b3d461d38e8.jpg)
-![results-example](https://user-images.githubusercontent.com/8655093/179979519-b02dda72-7606-4d3b-8b6a-23a845f80f14.jpg)
-![your-list-example](https://user-images.githubusercontent.com/8655093/179979529-27a16627-6185-4434-a0ce-6ef5b08722b2.jpg)
+        
+ <div>
+   
+ <img src="https://user-images.githubusercontent.com/8655093/179979528-a8929f24-56fc-4b48-a759-0b3d461d38e8.jpg" height="300"> </img>
+ <img src="https://user-images.githubusercontent.com/8655093/179979519-b02dda72-7606-4d3b-8b6a-23a845f80f14.jpg" height="300"> </img>
+  
+ <img src="https://user-images.githubusercontent.com/8655093/179979529-27a16627-6185-4434-a0ce-6ef5b08722b2.jpg" height="250"> </img>
+   
+</div>
+  
+
+</body>
