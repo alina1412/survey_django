@@ -11,9 +11,8 @@ from survey_app.crud import (
 )
 from survey_app.forms import AddQuestionForm
 from survey_app.models import Question
-
-from .view_mixin import LoginRequiredMixin
-from .utils import menu, menu_log
+from survey_app.views.utils import menu, menu_log
+from survey_app.views.view_mixin import LoginRequiredMixin
 
 logger = logging.getLogger(__name__)
 

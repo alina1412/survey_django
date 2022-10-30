@@ -13,8 +13,8 @@ from survey_app.crud import (
 )
 from survey_app.forms import AddChoiceForm
 from survey_app.models import Answer
-from survey_app.views.view_mixin import LoginRequiredMixin
 from survey_app.views.utils import get_menu, menu, menu_log
+from survey_app.views.view_mixin import LoginRequiredMixin
 
 logger = logging.getLogger(__name__)
 

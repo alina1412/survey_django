@@ -7,6 +7,7 @@ from survey_app.tests.utils import (
     add_choice_by_post,
     add_question_by_post,
     add_survey_by_post,
+    check_registered_templates,
     create_second_user,
     delete_question_by_checkbox,
     get_response_from_url_with_follow,
@@ -14,7 +15,6 @@ from survey_app.tests.utils import (
     make_survey,
     resp200_question_detail,
     resp200_survey_detail,
-    check_registered_templates,
 )
 
 logger = logging.getLogger(__name__)

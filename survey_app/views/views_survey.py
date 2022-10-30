@@ -18,8 +18,8 @@ from survey_app.crud import (
 from survey_app.download import AttachFile
 from survey_app.forms import CreateSurvey
 from survey_app.models import Survey
-from survey_app.views.view_mixin import LoginRequiredMixin
 from survey_app.views.utils import get_menu, menu, menu_log, menu_notlog
+from survey_app.views.view_mixin import LoginRequiredMixin
 
 logger = logging.getLogger(__name__)
 
@@ -121,7 +121,6 @@ class SurveyToPassView(ListView):
     model = Survey
     context_object_name = "object_list"
     extra_context = {"h3": "surveys you can pass", "title": "to pass"}
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

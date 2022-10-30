@@ -35,8 +35,7 @@ class AttachFile:
             return response
 
     def delete_file(self):
-        ...
-        raise NotImplemented
+        raise NotImplementedError
 
     # fl_path = f'{BASE_DIR}/static/img/{filename}'
     # print(fl_path)
