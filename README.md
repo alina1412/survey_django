@@ -9,9 +9,17 @@ The site is deployed here: https://survey-django-app.herokuapp.com/survey/home/
 The app can use `sqlite` or `postgres` database, it keeps data in tables: Survey, Question, Choice, Answer with models for each of them.
 For keeping Users it takes a model from django.contrib.auth.models.
 
-picture of some tables (except of a default django tables, auth_user - is a default one)
+### Models
+![models](https://user-images.githubusercontent.com/8655093/198866948-5690511c-6c0f-45b6-9c37-95e0424db625.jpg)
 
-`survey_django/
+### Tables
+picture of some tables (except of a default django tables, auth_user - is a default one)
+![tables](https://user-images.githubusercontent.com/8655093/198867044-4c7ba45b-c66e-4f7e-8599-2a96ad472dbd.jpg)
+
+
+### Structure
+```
+survey_django/
 |   .env
 |   .env-example
 |   .gitignore
@@ -88,8 +96,8 @@ picture of some tables (except of a default django tables, auth_user - is a defa
         tests.py
         urls.py
         wsgi.py
-        __init__.py`
-        
+        __init__.py
+ ```
 
 ## Example of pages
 ![survey-detail-example](https://user-images.githubusercontent.com/8655093/179979528-a8929f24-56fc-4b48-a759-0b3d461d38e8.jpg)
