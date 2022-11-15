@@ -6,7 +6,12 @@
 ## Description
 It's a django web-application. The site allows user to create surveys and answer surverys of other users.
 
-The site is deployed here: https://survey-django-app.herokuapp.com/survey/home/
+The site is/(was) deployed here: https://survey-django-app.herokuapp.com/survey/home/
+
+## How it worked (from the frontend look)
+video:  
+[![Watch the video](https://img.youtube.com/vi/YyxVe2knm9k/1.jpg)](https://youtu.be/YyxVe2knm9k)
+ 
 
 ## Structure
 The app can use `sqlite` or `postgres` database, it keeps data in tables: Survey, Question, Choice, Answer with models for each of them.
